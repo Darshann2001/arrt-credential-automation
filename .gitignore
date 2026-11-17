@@ -1,0 +1,21 @@
+# Dependencies and build output (sub-project .gitignore files also cover these).
+node_modules/
+.next/
+out/
+dist/
+coverage/
+
+# Local environment and credentials — never commit.
+.env
+.env.*
+!.env.example
+
+# Local supervised browser session (cookies only).
+.browser-profile/
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

@@ -1,0 +1,99 @@
+{
+  "evidenceType": "arrt-authorized-manual-sample-observation",
+  "recordedAt": "2026-11-17T09:53:47.416Z",
+  "provenance": {
+    "command": "npm run test:arrt:manual",
+    "mode": "manual-single-search",
+    "operatorAuthorizationConfirmed": true,
+    "authorizationReference": null,
+    "captchaCompletedBy": "operator, manually",
+    "captchaTokenReadBySoftware": false,
+    "captchaTokenInjected": false,
+    "cookiesRead": false,
+    "sessionIdsRead": false,
+    "antiForgeryValueRead": false,
+    "fixtureSaved": false
+  },
+  "browser": {
+    "headless": false,
+    "product": "Chrome/157.0.8103.52"
+  },
+  "page": {
+    "pageLoads": 1,
+    "finalPath": "/pages/verify-credentials",
+    "formReady": true,
+    "captchaReady": true,
+    "formFilled": true
+  },
+  "request": {
+    "endpointPath": "/VerifyCredentials/SearchByName",
+    "method": "POST",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "responseDurationMs": 563.53,
+    "bodyReadDurationMs": 1192.76,
+    "responseBytes": 7564
+  },
+  "capture": {
+    "rawBytes": 7564,
+    "sanitizedBytes": 3502,
+    "sanitizedSha256": "ab6c53cbbd9ef53c90876fe0dc20bc66bac052db20df1a1edb1b2319892d2c37",
+    "scriptsRemoved": 1,
+    "paginationFollowed": false
+  },
+  "structure": {
+    "hasTable": true,
+    "tableCount": 1,
+    "headerRowIndex": 0,
+    "headerCellCount": 5,
+    "unmappedHeaderCount": 1,
+    "mappedFields": [
+      "fullName",
+      "city",
+      "state",
+      "credentialString"
+    ],
+    "missingRequiredFields": [],
+    "dataRowCandidates": 11,
+    "hasNoResultsMarker": false,
+    "dataTableWrappers": 0,
+    "paginationControls": 0,
+    "scriptCount": 1,
+    "detailControlCount": 11,
+    "formControlCount": 0
+  },
+  "extraction": {
+    "outcome": "captured_and_extracted",
+    "fields": [
+      "fullName",
+      "city",
+      "state",
+      "credentialString"
+    ],
+    "acceptedCount": 11,
+    "rejectedCount": 0,
+    "duplicateCount": 0,
+    "totalRows": 11,
+    "ignoredRowCount": 0,
+    "recordIdPresent": false,
+    "validationErrorsByCode": {},
+    "duplicateStrategies": {},
+    "acceptanceRate": 1
+  },
+  "safety": {
+    "searchesSubmitted": 1,
+    "searchesAllowed": 1,
+    "retries": 0,
+    "paginationFollowed": false,
+    "formValuesLogged": false,
+    "failedNetworkRequests": 0
+  },
+  "outcome": "captured_and_extracted",
+  "exitCode": 0,
+  "notes": [
+    "No record values, header labels derived from rows, cookie values, session identifiers, anti-forgery values or CAPTCHA tokens are included.",
+    "Row counts and structural facts only; the sanitized HTML hash is a one-way digest and does not permit recovery of content.",
+    "One sample does not establish the real row cap, server-side paging, the empty-result fragment, HTTP 424 behaviour, or 403/429 handling.",
+    "unmappedHeaderCount is derived from the run's headerCellCount (5) minus mappedFields (4); the build that executed the sample did not emit the field itself."
+  ]
+}

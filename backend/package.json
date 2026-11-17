@@ -1,0 +1,45 @@
+{
+  "name": "arrt-name-search-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generates validated first-name and last-name search combinations for ARRT credential verification.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test src/tests/name-generator.test.js src/tests/name-hardening.test.js src/tests/extraction.test.js src/tests/automation.test.js src/tests/manual-search.test.js src/tests/api.test.js",
+    "test:step1": "node --test src/tests/name-generator.test.js src/tests/name-hardening.test.js",
+    "test:extraction": "node --test src/tests/extraction.test.js",
+    "test:automation": "node --test src/tests/automation.test.js",
+    "test:manual-search": "node --test src/tests/manual-search.test.js",
+    "test:api": "node --test src/tests/api.test.js",
+    "test:arrt:manual": "node scripts/test-arrt-manual-search.js",
+    "start": "node src/index.js",
+    "start:api": "node src/api/server.js",
+    "api:start": "node src/api/server.js",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:format": "prisma format",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:status": "prisma migrate status",
+    "db:studio": "prisma studio",
+    "demo": "node src/index.js",
+    "demo:extraction": "node src/extraction/demo.js",
+    "demo:automation": "node src/automation/demo.js",
+    "inspect:arrt": "node scripts/inspect-arrt-page.js"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "cheerio": "1.0.0",
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3",
+    "puppeteer-core": "^25.17.0"
+  }
+}
