@@ -1,0 +1,101 @@
+// Prisma schema for the ARRT credential verification API.
+//
+// This project stores only credential-directory facts that were obtained from an
+// authorized ARRT source. It does not store CAPTCHA material, cookies, session
+// identifiers or anti-forgery values.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Collection job lifecycle. A job row is created by the API but live collection
+/// is intentionally not implemented in this phase.
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+}
+
+/// One verified credential-holder row.
+///
+/// The display fields keep the source text (normalized for whitespace and place
+/// names). The `normalized*` fields are the case-insensitive comparison keys used
+/// for duplicate prevention and search.
+model CredentialRecord {
+  id                   String   @id @default(uuid()) @db.Uuid
+  fullName             String
+  city                 String
+  state                String
+  credentialString     String
+  normalizedName       String
+  normalizedCity       String
+  normalizedState      String
+  normalizedCredential String
+  source               String   @default("ARRT")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Duplicate prevention: the same person/city/state/credential pair is stored
+  // once. ARRT does not expose a stable record id, so this composite is the
+  // identity key.
+  @@unique([normalizedName, normalizedCity, normalizedState, normalizedCredential], map: "credential_records_identity_key")
+  @@index([normalizedName])
+  @@index([normalizedState])
+  @@index([normalizedCity])
+  @@index([normalizedCredential])
+  @@index([state, city])
+  @@index([createdAt])
+  @@map("credential_records")
+}
+
+/// A collection run. Records counts are denormalized so job history stays
+/// readable even if records are later removed.
+model CollectionJob {
+  id              String    @id @default(uuid()) @db.Uuid
+  status          JobStatus @default(PENDING)
+  source          String    @default("ARRT")
+  requestedTarget Int       @default(0)
+  recordsFound    Int       @default(0)
+  recordsInserted Int       @default(0)
+  recordsSkipped  Int       @default(0)
+  recordsRejected Int       @default(0)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  errorMessage    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  logs CollectionJobLog[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("collection_jobs")
+}
+
+/// Append-only job log. Deleting a job removes its logs.
+model CollectionJobLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  jobId     String   @db.Uuid
+  level     LogLevel @default(INFO)
+  message   String
+  createdAt DateTime @default(now())
+
+  job CollectionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+  @@map("collection_job_logs")
+}

@@ -1,0 +1,30 @@
+# Optional local PostgreSQL for development.
+#
+#   cd backend
+#   docker compose up -d
+#   cp .env.example .env
+#   npm run db:deploy
+#
+# The credentials below are local-only defaults. Do not reuse them anywhere real.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: arrt-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: arrt
+      POSTGRES_PASSWORD: arrt
+      POSTGRES_DB: arrt
+    ports:
+      - "5432:5432"
+    volumes:
+      - arrt-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arrt -d arrt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  arrt-postgres-data:

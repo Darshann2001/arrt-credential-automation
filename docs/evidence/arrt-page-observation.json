@@ -1,0 +1,2076 @@
+{
+  "generatedAt": "2026-11-17T09:12:34.841Z",
+  "targetUrl": "https://www.arrt.org/pages/verify-credentials",
+  "safety": {
+    "pageLoads": 1,
+    "searchSubmitted": false,
+    "captchaSolved": false,
+    "tokenValuesRead": false,
+    "tokenValuesPersisted": false,
+    "cookieValuesPersisted": false,
+    "antiForgeryValuesPersisted": false,
+    "ipEvasionUsed": false
+  },
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": false,
+    "product": "Chrome/157.0.8103.52"
+  },
+  "navigation": {
+    "finalUrl": "https://www.arrt.org/pages/verify-credentials",
+    "title": "Verify Credentials - ARRT",
+    "status": 200,
+    "durationMs": 5843,
+    "timing": {
+      "type": "navigate",
+      "redirectCount": 0,
+      "dnsMs": 16.7,
+      "connectMs": 969.6,
+      "tlsMs": 510.5,
+      "requestMs": 290.6,
+      "responseMs": 212.4,
+      "domContentLoadedMs": 3406.1,
+      "loadMs": 4131.5,
+      "transferSize": 16777,
+      "encodedBodySize": 16477,
+      "decodedBodySize": 77138,
+      "resourceCount": 49
+    }
+  },
+  "response": {
+    "contentType": "text/html; charset=utf-8",
+    "contentLength": null,
+    "headerNames": [
+      "cache-control",
+      "content-encoding",
+      "content-security-policy",
+      "content-type",
+      "date",
+      "pragma",
+      "set-cookie",
+      "strict-transport-security",
+      "transfer-encoding",
+      "vary",
+      "x-content-type-options",
+      "x-frame-options"
+    ],
+    "safeHeaders": {
+      "cache-control": "no-cache, no-store",
+      "content-encoding": "gzip",
+      "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+      "content-type": "text/html; charset=utf-8",
+      "date": "Tue, 17 Nov 2026 09:12:30 GMT",
+      "strict-transport-security": "max-age=2592000, max-age=31536000",
+      "vary": "Accept-encoding",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN"
+    },
+    "rateLimitHeaders": {}
+  },
+  "form": {
+    "found": true,
+    "id": "searchForm",
+    "method": "get",
+    "actionAttribute": null,
+    "actionResolved": "https://www.arrt.org/pages/verify-credentials",
+    "inputs": [
+      {
+        "id": "lastname",
+        "name": "lastname",
+        "type": "text",
+        "minLength": 2,
+        "maxLength": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "valuePresent": false,
+        "valueLength": 0,
+        "autocomplete": null,
+        "validationAttributes": {
+          "data-val": "true",
+          "data-val-required": "Last name is required",
+          "data-valmsg-for": null
+        }
+      },
+      {
+        "id": "firstname",
+        "name": "firstname",
+        "type": "text",
+        "minLength": 1,
+        "maxLength": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "valuePresent": false,
+        "valueLength": 0,
+        "autocomplete": null,
+        "validationAttributes": {
+          "data-val": "true",
+          "data-val-required": "First name is required",
+          "data-valmsg-for": null
+        }
+      },
+      {
+        "id": "submitButton",
+        "name": null,
+        "type": "submit",
+        "minLength": null,
+        "maxLength": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "valuePresent": true,
+        "valueLength": 6,
+        "autocomplete": null,
+        "validationAttributes": {
+          "data-val": null,
+          "data-val-required": null,
+          "data-valmsg-for": null
+        }
+      }
+    ],
+    "submitButtons": [
+      {
+        "id": "submitButton",
+        "value": "search",
+        "className": "btn btn-primary bottom10"
+      }
+    ],
+    "antiForgery": {
+      "selector": "input[name=\"__RequestVerificationToken\"]",
+      "present": true,
+      "type": "hidden",
+      "valuePresent": true,
+      "valueLength": 155,
+      "insideSearchForm": false,
+      "valuesPersisted": false
+    }
+  },
+  "captcha": {
+    "found": true,
+    "selector": ".g-recaptcha",
+    "provider": "google-recaptcha",
+    "siteKey": "6LfPLVUgAAAAAD3jDodwRg5dovg_foUGn3nren3Q",
+    "dataSize": null,
+    "dataCallback": null,
+    "dataTheme": null,
+    "inferredType": "reCAPTCHA v2 checkbox",
+    "scriptUrls": [
+      "https://www.gstatic.com/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+      "https://www.google.com/recaptcha/api.js"
+    ],
+    "grecaptchaGlobalPresent": true,
+    "grecaptchaMethods": {
+      "getResponse": true,
+      "reset": true,
+      "execute": true
+    },
+    "recaptchaConfigClientCount": 1,
+    "iframes": [
+      {
+        "title": "reCAPTCHA",
+        "origin": "https://www.google.com",
+        "path": "/recaptcha/api2/anchor",
+        "queryKeys": [
+          "anchor-ms",
+          "ar",
+          "cb",
+          "co",
+          "execute-ms",
+          "hl",
+          "k",
+          "ovv",
+          "size",
+          "v"
+        ],
+        "size": "normal"
+      },
+      {
+        "title": null,
+        "origin": null,
+        "path": null,
+        "queryKeys": [],
+        "size": null
+      }
+    ],
+    "captchaReady": true,
+    "frames": []
+  },
+  "page": {
+    "heading": "VERIFY CREDENTIALS",
+    "endpoints": {
+      "searchByName": "/VerifyCredentials/SearchByName",
+      "displayDetails": "/VerifyCredentials/GetDisplayDetails"
+    },
+    "searchList": {
+      "found": true,
+      "childElementCount": 0,
+      "textLength": 0,
+      "htmlLength": 0
+    },
+    "detailsModal": {
+      "found": true,
+      "contentFound": true
+    },
+    "libraries": {
+      "jqueryVersion": "3.5.1",
+      "dataTablesVersion": "1.10.20",
+      "dataTablesWrappers": 0,
+      "dataTablesPaginate": 0,
+      "dataTablesButtons": 0,
+      "genericPagination": 0
+    },
+    "tables": {
+      "count": 0,
+      "items": []
+    },
+    "bodyTextLength": 6684
+  },
+  "cookies": {
+    "count": 4,
+    "names": [
+      "nmstat",
+      ".AspNetCore.Antiforgery.QZMdixHDH0o",
+      "_ga_4WJG44PDZ0",
+      "_ga"
+    ],
+    "attributes": [
+      {
+        "name": "nmstat",
+        "domain": ".arrt.org",
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "Lax",
+        "session": false
+      },
+      {
+        "name": ".AspNetCore.Antiforgery.QZMdixHDH0o",
+        "domain": "www.arrt.org",
+        "path": "/",
+        "secure": false,
+        "httpOnly": true,
+        "sameSite": "Strict",
+        "session": true
+      },
+      {
+        "name": "_ga_4WJG44PDZ0",
+        "domain": ".arrt.org",
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": null,
+        "session": false
+      },
+      {
+        "name": "_ga",
+        "domain": ".arrt.org",
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": null,
+        "session": false
+      }
+    ],
+    "valuesPersisted": false
+  },
+  "scripts": {
+    "count": 24,
+    "dataTableInitializationObserved": false,
+    "items": [
+      {
+        "src": "https://www.googletagmanager.com/gtag/js?id=G-4WJG44PDZ0&cx=c&gtm=4e6bd1",
+        "async": true,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/gtag/js"
+      },
+      {
+        "src": "https://www.gstatic.com/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+        "async": true,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js"
+      },
+      {
+        "src": null,
+        "async": false,
+        "defer": false,
+        "inlineLength": 76,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": null
+      },
+      {
+        "src": "https://code.jquery.com/jquery-3.5.1.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/jquery-3.5.1.min.js"
+      },
+      {
+        "src": "https://kit.fontawesome.com/3e16e9b29c.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/3e16e9b29c.js"
+      },
+      {
+        "src": "https://www.arrt.org/js/bundles/primary-js-bundle.min.js?v=C8rEG36Dj6cBAWIit0jrIf1TUnYH0sEMc3YO21IUjU4",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/bundles/primary-js-bundle.min.js"
+      },
+      {
+        "src": "https://www.google.com/recaptcha/api.js",
+        "async": true,
+        "defer": true,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/recaptcha/api.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/1.10.20/js/jquery.dataTables.min.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/1.10.20/js/dataTables.bootstrap.min.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/plug-ins/1.10.20/pagination/input.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/plug-ins/1.10.20/pagination/input.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/responsive/2.2.3/js/dataTables.responsive.min.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/responsive/2.2.3/js/responsive.bootstrap.min.js"
+      },
+      {
+        "src": "https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/buttons/1.6.1/js/dataTables.buttons.min.js"
+      },
+      {
+        "src": null,
+        "async": false,
+        "defer": false,
+        "inlineLength": 173,
+        "inlineHasSearchEndpoint": true,
+        "inlineHasDetailsEndpoint": true,
+        "inlineHasDataTableInitialization": false,
+        "path": null
+      },
+      {
+        "src": "https://www.arrt.org/js/custom/VerifyCredentialsWidget.js?v=esEwwAc23OR391NVlJppVVtQhSMEIV7Y6lW3m4IQqV8",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/custom/VerifyCredentialsWidget.js"
+      },
+      {
+        "src": "https://www.arrt.org/_framework/blazor.web.js",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/_framework/blazor.web.js"
+      },
+      {
+        "src": "https://www.arrt.org/js/custom/BackToTop.js?v=2Pr286mjxqhlyj8c-rz-HCs0GC2ie81b7ZhbdKLvE-c",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/custom/BackToTop.js"
+      },
+      {
+        "src": "https://www.arrt.org/js/custom/IEModal.js?v=lV4zDlsv1KIqjg2VRKJ1bq2N2cToZD03-iNeP4_O-y0",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/custom/IEModal.js"
+      },
+      {
+        "src": "https://www.arrt.org/js/custom/blazorinterop.js?v=vnGYkH8yoBu6L5FhMYkPZ6_XSPFZFH_e6VpE9YrSAjA",
+        "async": false,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/custom/blazorinterop.js"
+      },
+      {
+        "src": "https://rum-static.pingdom.net/pa-5d9cd3d605a241000800057c.js",
+        "async": true,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/pa-5d9cd3d605a241000800057c.js"
+      },
+      {
+        "src": "https://www.googletagmanager.com/gtag/js?id=UA-9065187-14",
+        "async": true,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/gtag/js"
+      },
+      {
+        "src": null,
+        "async": false,
+        "defer": false,
+        "inlineLength": 185,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": null
+      },
+      {
+        "src": null,
+        "async": false,
+        "defer": false,
+        "inlineLength": 129,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": null
+      },
+      {
+        "src": "https://siteimproveanalytics.com/js/siteanalyze_6294877.js",
+        "async": true,
+        "defer": false,
+        "inlineLength": 0,
+        "inlineHasSearchEndpoint": false,
+        "inlineHasDetailsEndpoint": false,
+        "inlineHasDataTableInitialization": false,
+        "path": "/js/siteanalyze_6294877.js"
+      }
+    ]
+  },
+  "widgetSource": {
+    "observed": true,
+    "sourceLength": 2741,
+    "usesFormSubmitHandler": true,
+    "clientMinLengths": {
+      "lastName": 2,
+      "firstName": 1
+    },
+    "readsCaptchaResponse": true,
+    "checksEmptyCaptchaResponse": true,
+    "resetsCaptchaOnSuccess": true,
+    "postsSearchRequest": true,
+    "postsDetailsRequest": true,
+    "method": "POST",
+    "contentTypeOptionPresent": false,
+    "dataTypeOptionPresent": false,
+    "datatypeLowercaseOptionPresent": true,
+    "antiForgeryHeader": "RequestVerificationToken",
+    "bodyFields": [
+      "captchaSuccessCode",
+      "firstName",
+      "key",
+      "lastName"
+    ],
+    "insertsHtmlResult": true,
+    "handlesHttp424AsCaptchaFailure": true,
+    "hasGenericErrorBranch": true,
+    "dataTableInitialization": false,
+    "paginationLogic": false
+  },
+  "network": {
+    "count": 63,
+    "byResourceType": {
+      "document": 3,
+      "script": 23,
+      "stylesheet": 8,
+      "fetch": 6,
+      "image": 6,
+      "font": 7,
+      "xhr": 7,
+      "other": 2,
+      "manifest": 1
+    },
+    "byOrigin": {
+      "https://www.arrt.org": 20,
+      "https://code.jquery.com": 1,
+      "https://fonts.googleapis.com": 1,
+      "https://kit.fontawesome.com": 2,
+      "https://ka-p.fontawesome.com": 7,
+      "https://cdn.datatables.net": 8,
+      "https://fonts.gstatic.com": 4,
+      "https://www.google.com": 4,
+      "https://www.gstatic.com": 7,
+      "https://siteimproveanalytics.com": 1,
+      "https://www.googletagmanager.com": 2,
+      "https://rum-static.pingdom.net": 1,
+      "data:": 2,
+      "https://www.google-analytics.com": 1,
+      "https://6294877.global.r2.siteimproveanalytics.io": 1,
+      "https://rum-collector-2.pingdom.net": 1
+    },
+    "responses": [
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/pages/verify-credentials",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "document",
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:30 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://code.jquery.com",
+        "path": "/jquery-3.5.1.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "application/javascript; charset=utf-8",
+        "contentLength": "30879",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000, stale-while-revalidate=604800",
+          "content-encoding": "gzip",
+          "content-length": "30879",
+          "content-type": "application/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "nginx",
+          "vary": "Accept-Encoding"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://fonts.googleapis.com",
+        "path": "/css",
+        "queryKeys": [
+          "family"
+        ],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=86400, stale-while-revalidate=604800",
+          "content-encoding": "gzip",
+          "content-type": "text/css; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "ESF",
+          "strict-transport-security": "max-age=31536000",
+          "vary": "Sec-Fetch-Dest, Sec-Fetch-Mode, Sec-Fetch-Site",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/css/styles.min.css",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://kit.fontawesome.com",
+        "path": "/3e16e9b29c.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=60, public, stale-while-revalidate=30",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "origin, accept-encoding, access-control-request-headers, access-control-request-method"
+        },
+        "rateLimitHeaders": {
+          "x-request-id": "GNPB-j6SmemZjM4AAq4B"
+        }
+      },
+      {
+        "origin": "https://kit.fontawesome.com",
+        "path": "/3e16e9b29c/78756866/kit-upload.css",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "fetch",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "0",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926, public, must-revalidate",
+          "content-length": "0",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "origin, accept-encoding, access-control-request-headers, access-control-request-method"
+        },
+        "rateLimitHeaders": {
+          "x-request-id": "GMmZTQoQypvHGmMLY6Ci"
+        }
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/css/pro-v4-shims.min.css",
+        "queryKeys": [
+          "token"
+        ],
+        "method": "GET",
+        "resourceType": "fetch",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "4088",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-encoding": "gzip",
+          "content-length": "4088",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/css/pro-v4-font-face.min.css",
+        "queryKeys": [
+          "token"
+        ],
+        "method": "GET",
+        "resourceType": "fetch",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "1737",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-encoding": "gzip",
+          "content-length": "1737",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/css/pro-v5-font-face.min.css",
+        "queryKeys": [
+          "token"
+        ],
+        "method": "GET",
+        "resourceType": "fetch",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "7189",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-encoding": "gzip",
+          "content-length": "7189",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/css/pro.min.css",
+        "queryKeys": [
+          "token"
+        ],
+        "method": "GET",
+        "resourceType": "fetch",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "82455",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-encoding": "gzip",
+          "content-length": "82455",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/ARRT.Web.Blazor.Ui.styles.css",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/Images/Close.png",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/png",
+        "contentLength": "4687",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-length": "4687",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "image/png",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/images/ARRT_logo.png",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/png",
+        "contentLength": "10854",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-length": "10854",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "image/png",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/js/bundles/primary-js-bundle.min.js",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:31 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/responsive/2.2.3/css/responsive.dataTables.min.css",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/css; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/1.10.20/css/dataTables.bootstrap.min.css",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/css; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/buttons/1.6.1/js/dataTables.buttons.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/plug-ins/1.10.20/pagination/input.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/responsive/2.2.3/js/dataTables.responsive.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/1.10.20/js/jquery.dataTables.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/1.10.20/js/dataTables.bootstrap.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://cdn.datatables.net",
+        "path": "/responsive/2.2.3/js/responsive.bootstrap.min.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=315360000",
+          "content-encoding": "br",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://fonts.gstatic.com",
+        "path": "/s/lato/v25/S6uyw4BMUTPHjx4wXg.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "23580",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000",
+          "content-length": "23580",
+          "content-type": "font/woff2",
+          "date": "Sun, 15 Nov 2026 02:16:22 GMT",
+          "server": "sffe",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://fonts.gstatic.com",
+        "path": "/s/lato/v25/S6u9w4BMUTPHh6UVSwiPGQ.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "23040",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000",
+          "content-length": "23040",
+          "content-type": "font/woff2",
+          "date": "Sun, 15 Nov 2026 06:02:11 GMT",
+          "server": "sffe",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/webfonts/pro-fa-solid-900-12.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "16432",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-length": "16432",
+          "content-type": "font/woff2",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.google.com",
+        "path": "/recaptcha/api.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=300",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "ESF",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": "359371",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000",
+          "content-encoding": "gzip",
+          "content-length": "359371",
+          "content-type": "text/javascript",
+          "date": "Fri, 13 Nov 2026 03:38:29 GMT",
+          "server": "sffe",
+          "vary": "Accept-Encoding",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/css/verify-credentials.css",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/css",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/js/custom/BackToTop.js",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/js/custom/IEModal.js",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://siteimproveanalytics.com",
+        "path": "/js/siteanalyze_6294877.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "application/javascript; charset=utf-8",
+        "contentLength": "115939",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=86400, no-transform",
+          "content-encoding": "gzip",
+          "content-length": "115939",
+          "content-type": "application/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "cloudflare",
+          "vary": "accept-encoding"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.googletagmanager.com",
+        "path": "/gtag/js",
+        "queryKeys": [
+          "id"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "application/javascript; charset=UTF-8",
+        "contentLength": "135991",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=900",
+          "content-encoding": "zstd",
+          "content-length": "135991",
+          "content-type": "application/javascript; charset=UTF-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "server": "Google Tag Manager",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "vary": "Accept-Encoding"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/js/custom/blazorinterop.js",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/js/custom/VerifyCredentialsWidget.js",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/webfonts/pro-fa-brands-400-1.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "40344",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-length": "40344",
+          "content-type": "font/woff2",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://ka-p.fontawesome.com",
+        "path": "/releases/v6.7.2/webfonts/pro-fa-brands-400-0.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "37688",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=31556926",
+          "content-length": "37688",
+          "content-type": "font/woff2",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "cloudflare",
+          "vary": "Origin, Accept-Encoding, Access-Control-Request-Headers, Access-Control-Request-Method"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://rum-static.pingdom.net",
+        "path": "/pa-5d9cd3d605a241000800057c.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "application/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "max-age=86400",
+          "content-encoding": "gzip",
+          "content-type": "application/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "cloudflare",
+          "vary": "Accept-Encoding"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/_framework/blazor.web.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "text/javascript",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.google.com",
+        "path": "/recaptcha/api2/anchor",
+        "queryKeys": [
+          "anchor-ms",
+          "ar",
+          "cb",
+          "co",
+          "execute-ms",
+          "hl",
+          "k",
+          "ovv",
+          "size",
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "document",
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "gzip",
+          "content-security-policy": "script-src 'report-sample' 'nonce-zrm48g0CdHeawABXdgrUlg' 'unsafe-inline' 'strict-dynamic' https: http: 'unsafe-eval';object-src 'none';base-uri 'self';report-uri https://csp.withgoogle.com/csp/recaptcha/1",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "ESF",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/styles__ltr.css",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "35474",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000",
+          "content-encoding": "gzip",
+          "content-length": "35474",
+          "content-type": "text/css",
+          "date": "Fri, 13 Nov 2026 03:44:46 GMT",
+          "server": "sffe",
+          "vary": "Accept-Encoding",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": "359371",
+        "fromCache": true,
+        "safeHeaders": {
+          "content-encoding": "gzip",
+          "x-content-type-options": "nosniff",
+          "date": "Fri, 13 Nov 2026 03:38:29 GMT",
+          "content-type": "text/javascript",
+          "vary": "Accept-Encoding",
+          "cache-control": "public, max-age=31536000",
+          "content-length": "359371",
+          "server": "sffe"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/userinfo",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-store,no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/json; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "data:",
+        "path": null,
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/png",
+        "contentLength": null,
+        "fromCache": true,
+        "safeHeaders": {
+          "content-type": "image/png"
+        },
+        "rateLimitHeaders": {},
+        "dataUri": {
+          "meta": "data:image/png;base64",
+          "length": 31025
+        }
+      },
+      {
+        "origin": "data:",
+        "path": null,
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/png",
+        "contentLength": null,
+        "fromCache": true,
+        "safeHeaders": {
+          "content-type": "image/png"
+        },
+        "rateLimitHeaders": {},
+        "dataUri": {
+          "meta": "data:image/png;base64",
+          "length": 5577
+        }
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/api2/logo_48.png",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/png",
+        "contentLength": "2228",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=604800",
+          "content-length": "2228",
+          "content-type": "image/png",
+          "date": "Tue, 17 Nov 2026 01:45:57 GMT",
+          "server": "sffe",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/Webnotice/GetActiveWebnotice",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 204,
+        "contentType": null,
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=300",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "date": "Tue, 17 Nov 2026 09:12:32 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://fonts.gstatic.com",
+        "path": "/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "40128",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public, max-age=31536000",
+          "content-length": "40128",
+          "content-type": "font/woff2",
+          "date": "Mon, 16 Nov 2026 08:25:14 GMT",
+          "server": "sffe",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.googletagmanager.com",
+        "path": "/gtag/js",
+        "queryKeys": [
+          "cx",
+          "gtm",
+          "id"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "application/javascript; charset=UTF-8",
+        "contentLength": "164076",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=900",
+          "content-encoding": "zstd",
+          "content-length": "164076",
+          "content-type": "application/javascript; charset=UTF-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "Google Tag Manager",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "vary": "Accept-Encoding"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.google.com",
+        "path": "/recaptcha/api2/webworker.js",
+        "queryKeys": [
+          "hl",
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=300",
+          "content-encoding": "gzip",
+          "content-type": "text/javascript; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "ESF",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "other",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": "359371",
+        "fromCache": true,
+        "safeHeaders": {
+          "content-encoding": "gzip",
+          "x-content-type-options": "nosniff",
+          "date": "Fri, 13 Nov 2026 03:38:29 GMT",
+          "content-type": "text/javascript",
+          "vary": "Accept-Encoding",
+          "cache-control": "public, max-age=31536000",
+          "content-length": "359371",
+          "server": "sffe"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.google-analytics.com",
+        "path": "/g/collect",
+        "queryKeys": [
+          "_eu",
+          "_fv",
+          "_nsi",
+          "_p",
+          "_s",
+          "_ss",
+          "cid",
+          "dl",
+          "dma",
+          "dt",
+          "en",
+          "frm",
+          "gcd",
+          "gtm",
+          "ngs",
+          "npa",
+          "pscdl",
+          "rcb",
+          "sct",
+          "seg",
+          "sid",
+          "sr",
+          "tag_exp",
+          "tfd",
+          "tid",
+          "uaa",
+          "uab",
+          "uafvl",
+          "uam",
+          "uamb",
+          "uap",
+          "uapv",
+          "uaw",
+          "ul",
+          "v"
+        ],
+        "method": "POST",
+        "resourceType": "fetch",
+        "status": 204,
+        "contentType": "text/plain",
+        "contentLength": "0",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache, no-store, must-revalidate",
+          "content-length": "0",
+          "content-type": "text/plain",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "Golfe2"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/userinfo",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-store,no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/json; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://6294877.global.r2.siteimproveanalytics.io",
+        "path": "/image.aspx",
+        "queryKeys": [
+          "accountid",
+          "luid",
+          "prev",
+          "res",
+          "rnd",
+          "rt",
+          "title",
+          "url"
+        ],
+        "method": "GET",
+        "resourceType": "image",
+        "status": 200,
+        "contentType": "image/gif",
+        "contentLength": "34",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "private, max-age=0",
+          "content-length": "34",
+          "content-type": "image/gif",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/manifest.webmanifest",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "manifest",
+        "status": 200,
+        "contentType": "application/manifest+json",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/manifest+json",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.google.com",
+        "path": "/recaptcha/api2/bframe",
+        "queryKeys": [
+          "bft",
+          "hl",
+          "k",
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "document",
+        "status": 200,
+        "contentType": "text/html; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+          "content-encoding": "gzip",
+          "content-security-policy": "script-src 'report-sample' 'nonce-16uKv0HdDsFZoAr2gSU6-w' 'unsafe-inline' 'strict-dynamic' https: http: 'unsafe-eval';object-src 'none';base-uri 'self';report-uri https://csp.withgoogle.com/csp/recaptcha/1",
+          "content-type": "text/html; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "server": "ESF",
+          "x-content-type-options": "nosniff"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/styles__ltr.css",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "stylesheet",
+        "status": 200,
+        "contentType": "text/css",
+        "contentLength": "35474",
+        "fromCache": true,
+        "safeHeaders": {
+          "content-encoding": "gzip",
+          "x-content-type-options": "nosniff",
+          "date": "Fri, 13 Nov 2026 03:44:46 GMT",
+          "content-type": "text/css",
+          "vary": "Accept-Encoding",
+          "cache-control": "public, max-age=31536000",
+          "content-length": "35474",
+          "server": "sffe"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.gstatic.com",
+        "path": "/recaptcha/releases/4i3aN5wAweL7i3ADI7BSX4B-/recaptcha__en.js",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "script",
+        "status": 200,
+        "contentType": "text/javascript",
+        "contentLength": "359371",
+        "fromCache": true,
+        "safeHeaders": {
+          "content-encoding": "gzip",
+          "x-content-type-options": "nosniff",
+          "date": "Fri, 13 Nov 2026 03:38:29 GMT",
+          "content-type": "text/javascript",
+          "vary": "Accept-Encoding",
+          "cache-control": "public, max-age=31536000",
+          "content-length": "359371",
+          "server": "sffe"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/userinfo",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-store,no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/json; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://fonts.gstatic.com",
+        "path": "/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "font",
+        "status": 200,
+        "contentType": "font/woff2",
+        "contentLength": "40128",
+        "fromCache": true,
+        "safeHeaders": {
+          "x-content-type-options": "nosniff",
+          "date": "Mon, 16 Nov 2026 08:25:14 GMT",
+          "content-type": "font/woff2",
+          "cache-control": "public, max-age=31536000",
+          "content-length": "40128",
+          "server": "sffe"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/userinfo",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-store,no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/json; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/favicon.ico",
+        "queryKeys": [
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "other",
+        "status": 200,
+        "contentType": "image/x-icon",
+        "contentLength": "15086",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "public,max-age=86400",
+          "content-length": "15086",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "image/x-icon",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://www.arrt.org",
+        "path": "/api/userinfo",
+        "queryKeys": [],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": "application/json; charset=utf-8",
+        "contentLength": null,
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-store,no-cache",
+          "content-encoding": "gzip",
+          "content-security-policy": "frame-ancestors 'self' https://messaging.arrt.org https://apps.arrt.org https://stdata.arrt.org",
+          "content-type": "application/json; charset=utf-8",
+          "date": "Tue, 17 Nov 2026 09:12:33 GMT",
+          "strict-transport-security": "max-age=2592000, max-age=31536000",
+          "vary": "Accept-encoding",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "SAMEORIGIN"
+        },
+        "rateLimitHeaders": {}
+      },
+      {
+        "origin": "https://rum-collector-2.pingdom.net",
+        "path": "/img/beacon.gif",
+        "queryKeys": [
+          "bIH",
+          "bIW",
+          "cE",
+          "cS",
+          "dC",
+          "dCLEE",
+          "dCLES",
+          "dI",
+          "dL",
+          "dLE",
+          "dLS",
+          "dPR",
+          "fS",
+          "hS",
+          "id",
+          "lEE",
+          "lES",
+          "nS",
+          "nT",
+          "or",
+          "pD",
+          "path",
+          "rC",
+          "rE",
+          "rS",
+          "rV",
+          "reS",
+          "ref",
+          "resE",
+          "resS",
+          "s",
+          "sAH",
+          "sAW",
+          "sIS",
+          "sId",
+          "sST",
+          "title",
+          "uEE",
+          "uES",
+          "v"
+        ],
+        "method": "GET",
+        "resourceType": "xhr",
+        "status": 200,
+        "contentType": null,
+        "contentLength": "0",
+        "fromCache": false,
+        "safeHeaders": {
+          "cache-control": "no-cache, no-store, must-revalidate",
+          "content-length": "0",
+          "date": "Tue, 17 Nov 2026 09:12:34 GMT"
+        },
+        "rateLimitHeaders": {}
+      }
+    ],
+    "failedRequests": []
+  }
+}

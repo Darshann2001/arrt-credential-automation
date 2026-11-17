@@ -1,0 +1,24 @@
+# Local environment: never commit real credentials.
+.env
+.env.local
+.env.*.local
+
+# Dependencies and generated Prisma client.
+node_modules/
+src/generated/
+prisma/generated/
+
+# Local browser profile used to preserve a supervised ARRT session.
+# Contains browser cookies only; never add it to source control.
+.browser-profile/
+
+# Logs and coverage.
+*.log
+coverage/
+.nyc_output/
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
