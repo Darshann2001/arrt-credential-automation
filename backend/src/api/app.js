@@ -86,6 +86,8 @@ function createApp(options = {}) {
   app.use(createErrorHandler({ logger }));
 
   app.locals.prisma = prisma;
+  app.locals.jobRepository = jobRepository;
+  app.locals.worker = worker;
 
   return app;
 }

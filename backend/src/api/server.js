@@ -16,6 +16,9 @@ const path = require('node:path');
 const { readEnv, assertRuntimeEnv } = require('../config/env');
 const { getPrisma, disconnectPrisma } = require('../db/prisma');
 const { createApp } = require('./app');
+const {
+  createCollectionScheduler,
+} = require('../workers/collection.scheduler');
 
 const ENV_PATH = path.join(__dirname, '..', '..', '.env');
 
@@ -38,6 +41,13 @@ async function main() {
   const prisma = getPrisma();
   const app = createApp({ prisma, config });
 
+  const scheduler = createCollectionScheduler({
+    jobRepository: app.locals.jobRepository,
+    worker: app.locals.worker,
+    config,
+  });
+  scheduler.start();
+
   const server = app.listen(config.port, () => {
     console.log(
       `ARRT API listening on http://localhost:${config.port} (${config.nodeEnv})`
@@ -55,6 +65,7 @@ async function main() {
     console.log(`Received ${signal}. Shutting down.`);
 
     server.close(async () => {
+      scheduler.stop();
       await disconnectPrisma(prisma).catch(() => {});
       process.exit(0);
     });

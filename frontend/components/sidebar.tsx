@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import {
-  BriefcaseBusiness,
   IdCard,
   LayoutDashboard,
-  LockKeyhole,
-  PlusCircle,
   ShieldCheck,
   X,
 } from "lucide-react";
@@ -24,20 +21,6 @@ export const NAV_ITEMS = [
     label: "Credential Records",
     icon: IdCard,
     match: (pathname: string) => pathname.startsWith("/records"),
-  },
-  {
-    href: "/jobs",
-    label: "Collection Jobs",
-    icon: BriefcaseBusiness,
-    match: (pathname: string) =>
-      pathname === "/jobs" ||
-      (pathname.startsWith("/jobs/") && pathname !== "/jobs/new"),
-  },
-  {
-    href: "/jobs/new",
-    label: "Create Job",
-    icon: PlusCircle,
-    match: (pathname: string) => pathname === "/jobs/new",
   },
 ];
 
@@ -131,18 +114,6 @@ export function Sidebar({
           })}
         </nav>
 
-        <div className="border-t border-white/10 p-4">
-          <div className="rounded-lg bg-white/5 p-3">
-            <p className="flex items-center gap-2 text-xs font-semibold text-slate-200">
-              <LockKeyhole className="h-3.5 w-3.5" aria-hidden="true" />
-              Live collection disabled
-            </p>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-slate-400">
-              Creating a job records intent only. No browser opens and no ARRT
-              request is sent.
-            </p>
-          </div>
-        </div>
       </aside>
     </>
   );
