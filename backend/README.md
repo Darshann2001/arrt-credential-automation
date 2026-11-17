@@ -13,12 +13,15 @@ This repository contains four components:
 4. **Step 4 — persistence and API:** PostgreSQL via Prisma, plus an Express API
    that serves stored records, import jobs and dashboard statistics.
 
-Nothing here performs a live ARRT search, drives a browser, solves or bypasses
-CAPTCHAs, fetches remote pages, or rotates proxies/IPs. Step 4 stores and serves
-already-extracted records over HTTP, but `POST /api/jobs` only creates a
-`PENDING` row and never triggers collection. The live ARRT path remains blocked
-by explicit authorization and CAPTCHA-approval gates. The admin frontend for
-Steps 1–4 is a separate Next.js app in [`../frontend`](../frontend/README.md).
+The current app adds a supervised live path on top of Steps 1–4: `POST
+/api/jobs/:id/run` starts a single-job worker that opens a **visible Chrome**
+window, fills the wildcard name fields, waits for the operator to solve the
+reCAPTCHA by hand, extracts the results with the Step 2 engine, and imports them
+through Step 4. There is still no CAPTCHA solver, token access/injection,
+stealth or proxy rotation. Live execution is blocked by explicit authorization,
+CAPTCHA-approval and collection-limit gates (see [`../.env.example`](../.env.example)
+and [`../README.md`](../README.md)). The admin frontend is a separate Next.js
+app in [`../frontend`](../frontend/README.md).
 
 ## Requirements
 
@@ -26,8 +29,9 @@ Steps 1–4 is a separate Next.js app in [`../frontend`](../frontend/README.md).
 - `npm install` installs all runtime dependencies (Cheerio, Express, Prisma client)
 - PostgreSQL 14+ for the API, or Docker for the bundled Compose service
 
-Cheerio is pinned to `1.0.0`. Puppeteer is **not** installed; the browser service
-loads it lazily and reports `BROWSER_UNAVAILABLE` when it is absent.
+Cheerio is pinned to `1.0.0`. `puppeteer-core` is a devDependency; the browser
+service loads it lazily and reports `BROWSER_UNAVAILABLE` when absent. Chrome
+must already be installed and its path set in `LIVE_BROWSER_EXECUTABLE_PATH`.
 
 ## Run
 
@@ -268,9 +272,11 @@ A live provider is refused unless **all** of these are supplied:
 - `authorization.confirmed: true`
 - a non-empty `authorization.reference`
 
-The ARRT adapter additionally requires CAPTCHA approval, and even then throws
-`CAPTCHA_REQUIRES_APPROVAL` with `implementedSolver: false`. No solver, token
-injection, stealth or proxy rotation is implemented.
+The ARRT adapter additionally requires CAPTCHA approval and a page factory. It
+then fills the name fields and waits for the operator to solve the visible
+CAPTCHA and submit; it never reads or injects a token. The worker calls
+`assertLiveCollectionAllowed()` from `src/config/env.js` before any browser or
+ARRT request. No solver, token injection, stealth or proxy rotation exists.
 
 ### Monitoring and stop behavior
 
@@ -309,11 +315,13 @@ exponential cap.
 
 ### ARRT adapter status
 
-`arrt.adapter.js` encodes only observed public-page facts: selectors, the
+`arrt.adapter.js` encodes the observed public-page facts (selectors, the
 `/VerifyCredentials/SearchByName` and `/VerifyCredentials/GetDisplayDetails`
 paths, the reCAPTCHA v2 checkbox and site key, the anti-forgery header, and the
-HTTP 424 CAPTCHA-failure branch. It can analyze saved HTML and parse saved
-result fragments offline, but live `fetchPage()` is inert.
+HTTP 424 CAPTCHA-failure branch) and implements a supervised live `fetchPage()`:
+it navigates, fills `#firstname` / `#lastname`, prompts the operator to solve the
+visible challenge, waits up to five minutes for `#searchList`, and returns the
+rendered HTML to the Step 2 extractor. It can still analyze saved HTML offline.
 
 Investigation and architecture documents:
 
@@ -346,6 +354,7 @@ const app = createApp({
 | `GET /api/jobs` | Paginated jobs, optional `status` filter. |
 | `GET /api/jobs/:id` | Job counters plus ordered logs. |
 | `POST /api/jobs` | Create a `PENDING` job and first log only; no live collection. |
+| `POST /api/jobs/:id/run` | Start a supervised live run for a `PENDING` job (visible Chrome, manual CAPTCHA). |
 | `GET /api/dashboard/stats` | Totals, completed/failed jobs, recent records, by state, by credential type. |
 
 Imports reuse the Step 2 normalizer/validator. Identity is the composite
@@ -438,13 +447,14 @@ real PII:
 
 Last run on Node 22.20.0:
 
-- `npm test`: **136/136 passing**
+- `npm test`: **145/145 passing**
   - 22 original Step 1 tests
   - 12 Step 1 hardening regression tests
   - 30 Step 2 extraction tests
   - 37 Step 3 automation tests
   - 11 manual-search tests
   - 24 Step 4 API tests (in-memory Prisma double, no database)
+  - 9 Phase 1 live-gate tests
 - `node --check`: passed for every JavaScript file under `src/`
 - `npx prisma validate`: schema valid
 - `npm run demo:extraction`: 8 candidate rows, 7 accepted, 1 duplicate,
@@ -454,22 +464,23 @@ Last run on Node 22.20.0:
 
 ## Limitations (intentional)
 
-- No live ARRT access, live search request, pagination crawling, CAPTCHA
-  solving/bypass, stealth, proxy rotation or IP switching.
-- Puppeteer is not installed; the browser service lazy-loads it and reports
-  `BROWSER_UNAVAILABLE` when absent.
-- No frontend, and no authentication/authorization on the API. Add auth before
-  any non-local deployment.
-- `POST /api/jobs` does not run collection; it only records intent.
+- No CAPTCHA solving/bypass, token access, stealth, proxy rotation or IP
+  switching. The operator solves the challenge by hand in a visible browser.
+- `puppeteer-core` is a devDependency; Chrome must be installed locally and its
+  path supplied in `LIVE_BROWSER_EXECUTABLE_PATH`.
+- No authentication/authorization on the API. Add auth before any non-local
+  deployment.
+- `POST /api/jobs` only records intent; `POST /api/jobs/:id/run` starts the
+  supervised worker, and only when all live gates pass.
 - Dashboard credential grouping is a structural heuristic, not an authoritative
   ARRT classification.
 - Dedupe relies on the composite identity key because ARRT exposes no stable
   record id; a legitimate city or credential change creates a new row.
 - The API tests use an in-memory Prisma double. Run `npm run db:deploy` and a
   smoke request to verify a real PostgreSQL instance.
-- The ARRT adapter's live path is inert even when authorization and CAPTCHA
-  approval are supplied, because no solver or token-injection implementation
-  exists.
+- The ARRT adapter's live path requires all authorization, CAPTCHA-approval and
+  collection-limit env values, plus a locally installed Chrome. Results are read
+  from a single rendered results page; multi-page pagination is unverified.
 - `rowspan` is not expanded; `colspan` is expanded up to 50 columns.
 - Unrecognized state values are rejected rather than guessed.
 - Diacritic folding policy is still undecided; `Jose` and `José` remain distinct

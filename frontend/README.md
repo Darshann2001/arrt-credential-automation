@@ -82,12 +82,16 @@ npm run build
 - `GET /api/jobs`
 - `GET /api/jobs/:id`
 - `POST /api/jobs`
+- `POST /api/jobs/:id/run`
 
 ## Collection scope
 
-Creating a job only stores a `PENDING` row and an `INFO` log. It does **not**
-open a browser, contact ARRT, start live collection, or enable unattended
-collection. The dashboard never starts automation.
+Creating a job stores a `PENDING` row and an `INFO` log; nothing starts
+automatically. Opening a job's detail page and clicking **Run Job** calls
+`POST /api/jobs/:id/run`, which launches the supervised worker. Nothing runs
+until that button is clicked, and the worker still fails closed unless every
+live gate in `backend/.env` is configured (see [`../README.md`](../README.md)).
+The CAPTCHA is solved by the operator in a visible Chrome window.
 
 ## Demo vs imported records
 
