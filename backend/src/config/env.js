@@ -70,6 +70,14 @@ function readEnv(source = process.env) {
     databaseUrl: normalizeOptional(source.DATABASE_URL),
     frontendOrigins: parseOrigins(source.FRONTEND_URL),
     isProduction: nodeEnv === 'production',
+    collectionCron: {
+      enabled: parseBoolean(
+        source.COLLECTION_CRON_ENABLED,
+        'COLLECTION_CRON_ENABLED',
+        false
+      ),
+      hour: parseCronHour(source.COLLECTION_CRON_HOUR),
+    },
     live: {
       authorization: {
         confirmed: parseBoolean(
@@ -377,6 +385,25 @@ function parseScope(value) {
  * @param {unknown} value
  * @returns {number}
  */
+function parseCronHour(value) {
+  const text = normalizeOptional(value);
+  if (text === null) {
+    return 2;
+  }
+
+  const hour = Number(text);
+  if (!Number.isInteger(hour) || hour < 0 || hour > 23) {
+    throw new Error(
+      `COLLECTION_CRON_HOUR must be an integer between 0 and 23, received "${text}".`
+    );
+  }
+  return hour;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {number}
+ */
 function parsePort(value) {
   if (value === undefined || value === null || value === '') {
     return DEFAULT_PORT;
@@ -425,6 +452,7 @@ module.exports = {
   readEnv,
   assertRuntimeEnv,
   assertLiveCollectionAllowed,
+  parseCronHour,
   parsePort,
   parseOrigins,
 };
