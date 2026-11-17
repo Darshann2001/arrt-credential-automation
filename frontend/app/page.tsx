@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Dashboard } from "@/components/dashboard/dashboard";
+import { RecordsExplorer } from "@/components/records/records-explorer";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Credential Records",
 };
 
 export default function DashboardPage() {
-  return <Dashboard />;
+  return <RecordsExplorer />;
 }
