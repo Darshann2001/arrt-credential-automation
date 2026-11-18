@@ -36,15 +36,14 @@ const {
 /**
  * One high-yield, real name-fragment query per supervised run. ARRT matches
  * substrings anywhere in the name (e.g. "adam" matched Adams, McAdam and
- * Risk-Adams), so a common first/last-name pair returns many rows in a single
+ * Risk-Adams), so a short first/last-name pair returns many rows in a single
  * search and a single CAPTCHA. Wildcards like "A*" are literal text and return
  * nothing.
  *
- * "john" / "smith" are among the most common US first and last names, so this
- * query is expected to return a large result set from one request.
+ * "ch" / "ad" is the current operator-selected query (expected ~206 rows).
  */
 const SUPERVISED_SEARCHES = Object.freeze([
-  { firstName: 'john', lastName: 'smith' },
+  { firstName: 'ch', lastName: 'ad' },
 ]);
 
 function buildSearchPlan(limit) {
