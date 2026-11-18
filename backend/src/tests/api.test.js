@@ -403,6 +403,31 @@ test('GET /api/records paginates with total metadata', async (t) => {
   assert.equal(beyond.body.pagination.total, 5);
 });
 
+test('GET /api/records uses a deterministic id tiebreaker when sorting', async (t) => {
+  const prisma = createFakePrisma();
+  const findManyCalls = [];
+  const originalFindMany = prisma.credentialRecord.findMany;
+  prisma.credentialRecord.findMany = async (args) => {
+    findManyCalls.push(args);
+    return originalFindMany(args);
+  };
+
+  const { server, baseUrl } = await startApi(prisma);
+  t.after(() => stop(server));
+
+  const response = await request(
+    baseUrl,
+    '/api/records?page=1&pageSize=2&sortBy=createdAt&sortOrder=desc'
+  );
+
+  assert.equal(response.status, 200);
+  assert.equal(findManyCalls.length, 1);
+  assert.deepEqual(findManyCalls[0].orderBy, [
+    { createdAt: 'desc' },
+    { id: 'desc' },
+  ]);
+});
+
 test('GET /api/records sorts by whitelisted fields in both directions', async (t) => {
   const prisma = createFakePrisma();
   const { server, baseUrl } = await startApi(prisma);

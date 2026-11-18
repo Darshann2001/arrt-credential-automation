@@ -77,7 +77,10 @@ function createRecordRepository(prisma) {
         delegate().count({ where }),
         delegate().findMany({
           where,
-          orderBy: { [sortBy]: sortOrder },
+          orderBy: [
+            { [sortBy]: sortOrder },
+            { id: sortOrder },
+          ],
           skip,
           take,
           select: PUBLIC_SELECT,
