@@ -5,7 +5,7 @@
   "description": "Generates validated first-name and last-name search combinations for ARRT credential verification.",
   "main": "src/index.js",
   "scripts": {
-    "test": "node --test src/tests/name-generator.test.js src/tests/name-hardening.test.js src/tests/extraction.test.js src/tests/automation.test.js src/tests/manual-search.test.js src/tests/api.test.js src/tests/scheduler.test.js src/tests/worker.test.js",
+    "test": "node --test src/tests/name-generator.test.js src/tests/name-hardening.test.js src/tests/us-name-digraphs.test.js src/tests/extraction.test.js src/tests/automation.test.js src/tests/manual-search.test.js src/tests/api.test.js src/tests/scheduler.test.js src/tests/worker.test.js",
     "test:step1": "node --test src/tests/name-generator.test.js src/tests/name-hardening.test.js",
     "test:extraction": "node --test src/tests/extraction.test.js",
     "test:automation": "node --test src/tests/automation.test.js",

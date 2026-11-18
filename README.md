@@ -89,7 +89,9 @@ cd frontend && npm run build
   to collect and share.
 - Results are read from the single rendered results page; multi-page pagination
   has not been verified.
-- One CAPTCHA may be required per wildcard search if the record target is not
-  reached on the first search.
+- One CAPTCHA is required per curated digraph search. The live plan uses the
+  top 10 US name digraphs for each field (100 searches, `ch`/`ad` first), chosen
+  by `us-name-digraphs.util.js`. ARRT treats `*` as literal text — a 2026-11-18
+  live probe of `A*`/`A*` returned 0 rows — so alphabet wildcards are not used.
 - Detailed docs live in [`docs/`](docs/) and
   [`backend/README.md`](backend/README.md).

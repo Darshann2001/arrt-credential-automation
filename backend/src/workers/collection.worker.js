@@ -15,10 +15,11 @@
  *   - a resumed job repeats only searches that have not yet succeeded;
  *   - the job is marked COMPLETED only when every planned search succeeded.
  *
- * ARRT does substring matching on real name text. Patterns such as "A*" are
- * treated literally and return no rows, so the plan uses real name fragments
- * that are known to return live results. Each search requires a human CAPTCHA,
- * so the supervised demo intentionally uses a single query.
+ * ARRT does substring matching on real name text. Live probe 2026-11-18
+ * (job 4e31dab6-04ca-4e51-8af9-47683b1627f0) submitted "A*" / "A*" after a
+ * human CAPTCHA and imported 0 rows — `*` is literal text, not a wildcard.
+ * The plan therefore uses curated real digraph fragments (e.g. "ch" / "ad"),
+ * never alphabet wildcards like "A*". Each search requires a human CAPTCHA.
  */
 
 const { assertLiveCollectionAllowed } = require('../config/env');
@@ -30,28 +31,63 @@ const { createBrowserService } = require('../automation/browser.service');
 const { createPageHandler } = require('../automation/page-handler');
 const { collectRecords } = require('../automation/collection.service');
 const {
+  generateCombinations,
+} = require('../services/name-generator.service');
+const {
+  listUsFirstNameDigraphs,
+  listUsLastNameDigraphs,
+} = require('../utils/us-name-digraphs.util');
+const {
   STATUS,
 } = require('../api/repositories/search-progress.repository');
 
 /**
- * One high-yield, real name-fragment query per supervised run. ARRT matches
- * substrings anywhere in the name (e.g. "adam" matched Adams, McAdam and
- * Risk-Adams), so a short first/last-name pair returns many rows in a single
- * search and a single CAPTCHA. Wildcards like "A*" are literal text and return
- * nothing.
+ * Highest-ranked US name digraphs per field. The filtered grid has 329² pairs,
+ * which would need one human CAPTCHA each. The supervised demo uses only the
+ * top slice so the CAPTCHA budget stays realistic; every pair is one search.
  *
- * "ch" / "ad" is the current operator-selected query (expected ~206 rows).
+ * "ch" / "ad" is the proven high-yield pair (~205 rows) and stays first.
+ * Wildcards are never used: `*` is literal on ARRT (live probe 2026-11-18).
  */
-const SUPERVISED_SEARCHES = Object.freeze([
-  { firstName: 'ch', lastName: 'ad' },
+const TOP_DIGRAPHS_PER_FIELD = 10;
+const PROVEN_FIRST_FRAGMENT = 'ch';
+const PROVEN_LAST_FRAGMENT = 'ad';
+
+const CURATED_FIRST_FRAGMENTS = Object.freeze([
+  PROVEN_FIRST_FRAGMENT,
+  ...listUsFirstNameDigraphs()
+    .filter((digraph) => digraph !== PROVEN_FIRST_FRAGMENT)
+    .slice(0, TOP_DIGRAPHS_PER_FIELD - 1),
+]);
+const CURATED_LAST_FRAGMENTS = Object.freeze([
+  PROVEN_LAST_FRAGMENT,
+  ...listUsLastNameDigraphs()
+    .filter((digraph) => digraph !== PROVEN_LAST_FRAGMENT)
+    .slice(0, TOP_DIGRAPHS_PER_FIELD - 1),
 ]);
 
+/**
+ * Builds the supervised search plan from curated digraph fragments.
+ * Wildcards are rejected so offline A* patterns cannot leak into live posts.
+ *
+ * @param {number} limit max searches for this job
+ * @returns {Array<{firstName: string, lastName: string}>}
+ */
 function buildSearchPlan(limit) {
-  return SUPERVISED_SEARCHES.slice(
-    0,
-    Math.max(1, Math.min(limit, SUPERVISED_SEARCHES.length))
+  const { combinations } = generateCombinations(
+    {
+      firstNames: [...CURATED_FIRST_FRAGMENTS],
+      lastNames: [...CURATED_LAST_FRAGMENTS],
+    },
+    { allowWildcards: false }
   );
+
+  const capped = Math.max(1, Math.min(limit, combinations.length));
+  return combinations.slice(0, capped);
 }
+
+/** @deprecated Use buildSearchPlan / CURATED_*_FRAGMENTS. Kept for test imports. */
+const SUPERVISED_SEARCHES = Object.freeze(buildSearchPlan(Number.MAX_SAFE_INTEGER));
 
 /**
  * A search counts as successful only when the run completed, at least one page
@@ -330,4 +366,7 @@ module.exports = {
   buildSearchPlan,
   searchSucceeded,
   SUPERVISED_SEARCHES,
+  CURATED_FIRST_FRAGMENTS,
+  CURATED_LAST_FRAGMENTS,
+  TOP_DIGRAPHS_PER_FIELD,
 };

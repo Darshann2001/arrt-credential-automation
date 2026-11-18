@@ -17,6 +17,11 @@ const { readEnv } = require('../config/env');
 const {
   createCollectionWorker,
   searchSucceeded,
+  buildSearchPlan,
+  CURATED_FIRST_FRAGMENTS,
+  CURATED_LAST_FRAGMENTS,
+  SUPERVISED_SEARCHES,
+  TOP_DIGRAPHS_PER_FIELD,
 } = require('../workers/collection.worker');
 const { createJobRepository } = require('../api/repositories/job.repository');
 const {
@@ -418,5 +423,58 @@ test('jobs controller rejects COMPLETED and CANCELLED runs', async () => {
     const result = await callRun(jobsService, worker);
     assert.equal(result.ok, false, `${status} should not be runnable`);
     assert.equal(result.error.code, 'JOB_NOT_RUNNABLE');
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Curated digraph search plan (no ARRT wildcards)
+// ---------------------------------------------------------------------------
+
+test('buildSearchPlan uses curated digraph fragments without wildcards', () => {
+  const plan = buildSearchPlan(100);
+
+  assert.ok(plan.length >= 1);
+  assert.ok(
+    CURATED_FIRST_FRAGMENTS.every((fragment) => !fragment.includes('*')),
+    'first-name fragments must be real digraphs, not A* wildcards'
+  );
+  assert.ok(
+    CURATED_LAST_FRAGMENTS.every((fragment) => !fragment.includes('*')),
+    'last-name fragments must be real digraphs, not A* wildcards'
+  );
+
+  for (const search of plan) {
+    assert.ok(!search.firstName.includes('*'));
+    assert.ok(!search.lastName.includes('*'));
+    assert.ok(search.lastName.length >= 2);
+  }
+
+  assert.deepEqual(plan[0], { firstName: 'ch', lastName: 'ad' });
+  assert.deepEqual(SUPERVISED_SEARCHES[0], { firstName: 'ch', lastName: 'ad' });
+});
+
+test('buildSearchPlan respects the search limit', () => {
+  const plan = buildSearchPlan(1);
+  assert.equal(plan.length, 1);
+});
+
+test('buildSearchPlan uses only the top-ranked digraph slice', () => {
+  assert.equal(TOP_DIGRAPHS_PER_FIELD, 10);
+  assert.equal(CURATED_FIRST_FRAGMENTS.length, TOP_DIGRAPHS_PER_FIELD);
+  assert.equal(CURATED_LAST_FRAGMENTS.length, TOP_DIGRAPHS_PER_FIELD);
+  assert.equal(CURATED_FIRST_FRAGMENTS[0], 'ch');
+  assert.equal(CURATED_LAST_FRAGMENTS[0], 'ad');
+
+  assert.equal(SUPERVISED_SEARCHES.length, TOP_DIGRAPHS_PER_FIELD ** 2);
+  assert.deepEqual(buildSearchPlan(TOP_DIGRAPHS_PER_FIELD ** 2)[0], {
+    firstName: 'ch',
+    lastName: 'ad',
+  });
+
+  for (const search of SUPERVISED_SEARCHES) {
+    assert.match(search.firstName, /^[a-z]{2}$/);
+    assert.match(search.lastName, /^[a-z]{2}$/);
+    assert.ok(!search.firstName.includes('*'));
+    assert.ok(!search.lastName.includes('*'));
   }
 });
