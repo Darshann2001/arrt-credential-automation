@@ -20,6 +20,9 @@ const { createErrorHandler } = require('./middleware/error-handler');
 
 const { createRecordRepository } = require('./repositories/record.repository');
 const { createJobRepository } = require('./repositories/job.repository');
+const {
+  createSearchProgressRepository,
+} = require('./repositories/search-progress.repository');
 
 const { createRecordsService } = require('./services/records.service');
 const { createImportService } = require('./services/import.service');
@@ -52,6 +55,7 @@ function createApp(options = {}) {
 
   const recordRepository = createRecordRepository(prisma);
   const jobRepository = createJobRepository(prisma);
+  const searchProgressRepository = createSearchProgressRepository(prisma);
 
   const recordsService = createRecordsService({ recordRepository });
   const importService = createImportService({ recordRepository, jobRepository });
@@ -63,6 +67,7 @@ function createApp(options = {}) {
   const worker = createCollectionWorker({
     jobRepository,
     importService,
+    searchProgressRepository,
     config,
   });
 

@@ -79,11 +79,33 @@ model CollectionJob {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  logs CollectionJobLog[]
+  logs     CollectionJobLog[]
+  searches CollectionSearchProgress[]
 
   @@index([status])
   @@index([createdAt])
   @@map("collection_jobs")
+}
+
+/// Per-search checkpoint. Completed searches are skipped when a job is resumed,
+/// so a human never repeats a CAPTCHA for work that already succeeded.
+model CollectionSearchProgress {
+  id              String    @id @default(uuid()) @db.Uuid
+  jobId           String    @db.Uuid
+  firstName       String
+  lastName        String
+  status          String    @default("PENDING")
+  rowCount        Int       @default(0)
+  recordsInserted Int       @default(0)
+  errorMessage    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  job CollectionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, firstName, lastName], map: "collection_search_progress_job_query_key")
+  @@index([jobId, status])
+  @@map("collection_search_progress")
 }
 
 /// Append-only job log. Deleting a job removes its logs.

@@ -25,9 +25,12 @@ function createJobsController({ jobsService, worker }) {
   const run = asyncHandler(async (req, res) => {
     const job = await jobsService.getById(req.validated.params.id);
 
-    if (job.status !== 'PENDING') {
+    // PENDING starts a fresh run; RUNNING (interrupted) and FAILED (partial)
+    // jobs may be resumed so completed searches are not repeated. COMPLETED
+    // and CANCELLED are terminal.
+    if (!['PENDING', 'RUNNING', 'FAILED'].includes(job.status)) {
       throw ApiError.conflict(
-        `Only PENDING jobs can be run. Current status is ${job.status}.`,
+        `Jobs with status ${job.status} cannot be run. Only PENDING, RUNNING or FAILED jobs can be run.`,
         'JOB_NOT_RUNNABLE'
       );
     }

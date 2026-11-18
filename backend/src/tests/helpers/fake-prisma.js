@@ -28,6 +28,7 @@ function createFakePrisma(seed = {}) {
     records: [],
     jobs: [],
     logs: [],
+    searchProgress: [],
   };
 
   if (Array.isArray(seed.records)) {
@@ -221,6 +222,76 @@ function createFakePrisma(seed = {}) {
       },
     },
 
+    collectionSearchProgress: {
+      async createMany({ data = [], skipDuplicates = false }) {
+        maybeFail('collectionSearchProgress', 'createMany');
+
+        const identity = (row) =>
+          [row.jobId, row.firstName, row.lastName].join('\u0000');
+        const existing = new Set(state.searchProgress.map(identity));
+        let count = 0;
+
+        for (const item of data) {
+          const key = identity(item);
+
+          if (existing.has(key)) {
+            if (skipDuplicates) {
+              continue;
+            }
+
+            throw new PrismaLikeError(
+              'P2002',
+              'Unique constraint failed on collection_search_progress_job_query_key'
+            );
+          }
+
+          const now = new Date();
+          existing.add(key);
+          state.searchProgress.push({
+            id: item.id || crypto.randomUUID(),
+            jobId: item.jobId,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            status: item.status ?? 'PENDING',
+            rowCount: item.rowCount ?? 0,
+            recordsInserted: item.recordsInserted ?? 0,
+            errorMessage: item.errorMessage ?? null,
+            createdAt: now,
+            updatedAt: now,
+          });
+          count += 1;
+        }
+
+        return { count };
+      },
+
+      async findMany(args = {}) {
+        maybeFail('collectionSearchProgress', 'findMany');
+        return findMany(state.searchProgress, args, state);
+      },
+
+      async update({ where, data = {}, select }) {
+        maybeFail('collectionSearchProgress', 'update');
+
+        const row = state.searchProgress.find((item) => item.id === where.id);
+
+        if (!row) {
+          throw new PrismaLikeError('P2025', 'Record to update not found.');
+        }
+
+        for (const [key, value] of Object.entries(data)) {
+          if (value && typeof value === 'object' && 'increment' in value) {
+            row[key] = Number(row[key] || 0) + Number(value.increment);
+          } else {
+            row[key] = value;
+          }
+        }
+
+        row.updatedAt = new Date();
+        return project(row, select, state);
+      },
+    },
+
     collectionJobLog: {
       async create({ data = {}, select }) {
         maybeFail('collectionJobLog', 'create');
@@ -270,6 +341,7 @@ function createFakePrisma(seed = {}) {
       state.records.length = 0;
       state.jobs.length = 0;
       state.logs.length = 0;
+      state.searchProgress.length = 0;
       failures.clear();
     },
   };

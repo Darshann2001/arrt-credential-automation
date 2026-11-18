@@ -8,6 +8,13 @@
  * results with the existing engine, imports them into the DB, then closes the
  * browser. No CAPTCHA solving, token access, stealth or proxy rotation.
  *
+ * Each search is processed independently:
+ *   - a per-search checkpoint records COMPLETED / FAILED / PENDING state;
+ *   - records are imported immediately after a verified search, so an
+ *     interruption never loses already-collected rows;
+ *   - a resumed job repeats only searches that have not yet succeeded;
+ *   - the job is marked COMPLETED only when every planned search succeeded.
+ *
  * ARRT does substring matching on real name text. Patterns such as "A*" are
  * treated literally and return no rows, so the plan uses real name fragments
  * that are known to return live results. Each search requires a human CAPTCHA,
@@ -22,6 +29,10 @@ const {
 const { createBrowserService } = require('../automation/browser.service');
 const { createPageHandler } = require('../automation/page-handler');
 const { collectRecords } = require('../automation/collection.service');
+const {
+  STATUS,
+} = require('../api/repositories/search-progress.repository');
+
 /**
  * One high-yield, real name-fragment query per supervised run. ARRT matches
  * substrings anywhere in the name (e.g. "adam" matched Adams, McAdam and
@@ -37,10 +48,52 @@ const SUPERVISED_SEARCHES = Object.freeze([
 ]);
 
 function buildSearchPlan(limit) {
-  return SUPERVISED_SEARCHES.slice(0, Math.max(1, Math.min(limit, SUPERVISED_SEARCHES.length)));
+  return SUPERVISED_SEARCHES.slice(
+    0,
+    Math.max(1, Math.min(limit, SUPERVISED_SEARCHES.length))
+  );
 }
 
-function createCollectionWorker({ jobRepository, importService, config }) {
+/**
+ * A search counts as successful only when the run completed, at least one page
+ * was actually extracted, the extracted counts reconcile, and no page errored.
+ * This is deliberately strict: a skipped/captcha-blocked search or a partial
+ * grid read must never be persisted as a completed checkpoint.
+ *
+ * @param {object} result result of collectRecords() for a single search
+ * @returns {boolean}
+ */
+function searchSucceeded(result) {
+  return Boolean(
+    result &&
+      result.status === 'completed' &&
+      result.stats &&
+      result.stats.searchesCompleted >= 1 &&
+      result.stats.countsConsistent === true &&
+      Array.isArray(result.stats.pageErrors) &&
+      result.stats.pageErrors.length === 0
+  );
+}
+
+/**
+ * @param {object} deps
+ * @param {object} deps.jobRepository
+ * @param {object} deps.importService
+ * @param {object} deps.searchProgressRepository
+ * @param {object} deps.config
+ * @param {Array<{firstName: string, lastName: string}>} [deps.searches] test override
+ * @param {Function} [deps.providerFactory] test override for provider creation
+ * @param {Function} [deps.collectRecordsImpl] test override for collection
+ */
+function createCollectionWorker({
+  jobRepository,
+  importService,
+  searchProgressRepository,
+  config,
+  searches: searchPlanOverride,
+  providerFactory,
+  collectRecordsImpl = collectRecords,
+}) {
   let activeJobId = null;
 
   function createProvider(approval, log) {
@@ -98,8 +151,12 @@ function createCollectionWorker({ jobRepository, importService, config }) {
     if (!job) {
       throw new Error(`Job ${jobId} was not found.`);
     }
-    if (job.status !== 'PENDING') {
-      throw new Error(`Job ${jobId} is ${job.status}, not PENDING.`);
+
+    // PENDING starts a fresh run. RUNNING is an interrupted process that can be
+    // resumed, and FAILED is a run that stopped early. COMPLETED and CANCELLED
+    // are terminal and must not be restarted.
+    if (!['PENDING', 'RUNNING', 'FAILED'].includes(job.status)) {
+      throw new Error(`Job ${jobId} is ${job.status} and cannot be run.`);
     }
 
     const approval = assertLiveCollectionAllowed(config);
@@ -126,34 +183,114 @@ function createCollectionWorker({ jobRepository, importService, config }) {
     let provider = null;
 
     try {
-      const searchPlan = buildSearchPlan(plannedSearches);
-      await log('INFO', `Starting supervised live collection with ${searchPlan.length} real name-fragment search(es).`);
+      const searchPlan =
+        Array.isArray(searchPlanOverride) && searchPlanOverride.length > 0
+          ? searchPlanOverride
+          : buildSearchPlan(plannedSearches);
 
-      provider = createProvider(approval, log);
-      const result = await collectRecords(searchPlan, {
-        provider,
-        allowLiveProvider: true,
-        authorization: {
-          confirmed: true,
-          reference: approval.authorization.reference,
-        },
-        target: { min: 1, max: Math.max(1, job.requestedTarget) },
-        stopOnCaptcha: false,
-        minIntervalMs: 1000,
-        maxRetries: 0,
-      });
+      // Create checkpoints for the whole plan. Existing rows are preserved so a
+      // resumed job never repeats a search that already succeeded.
+      await searchProgressRepository.ensureMany(job.id, searchPlan);
+      const pending = await searchProgressRepository.listPending(job.id);
 
-      await importService.importRecords({
-        records: result.records,
-        source: job.source,
-        jobId: job.id,
-      });
-
-      await jobRepository.markCompleted(job.id);
       await log(
         'INFO',
-        `Imported ${result.records.length} record(s); collection stopped because ${result.stopReason || 'plan exhausted'}.`
+        `Starting supervised live collection: ${searchPlan.length} planned search(es), ${pending.length} pending.`
       );
+
+      provider = providerFactory
+        ? providerFactory(approval, log)
+        : createProvider(approval, log);
+
+      for (const checkpoint of pending) {
+        const search = {
+          firstName: checkpoint.firstName,
+          lastName: checkpoint.lastName,
+        };
+
+        await searchProgressRepository.markRunning(checkpoint.id);
+
+        try {
+          const result = await collectRecordsImpl([search], {
+            provider,
+            allowLiveProvider: true,
+            authorization: {
+              confirmed: true,
+              reference: approval.authorization.reference,
+            },
+            target: { min: 1, max: Math.max(1, job.requestedTarget) },
+            stopOnCaptcha: false,
+            minIntervalMs: 1000,
+            maxRetries: 0,
+          });
+
+          if (!searchSucceeded(result)) {
+            const reason =
+              result && result.stopReason ? result.stopReason : 'verification-failed';
+            await searchProgressRepository.markFailed(checkpoint.id, reason);
+            await log(
+              'WARN',
+              `Search ${search.firstName}/${search.lastName} failed verification (${reason}); no records imported for it.`
+            );
+            continue;
+          }
+
+          // Import immediately, while the verified rows are in hand. If the
+          // process stops later, this search's rows are already persisted.
+          await importService.importRecords({
+            records: result.records,
+            source: job.source,
+            jobId: job.id,
+          });
+
+          await searchProgressRepository.markCompleted(checkpoint.id, {
+            rowCount: result.totalRows,
+            recordsInserted: result.records.length,
+          });
+
+          await log(
+            'INFO',
+            `Imported ${result.records.length} verified record(s) for ${search.firstName}/${search.lastName}.`
+          );
+        } catch (error) {
+          const message = error && error.message ? error.message : String(error);
+          await searchProgressRepository
+            .markFailed(checkpoint.id, message)
+            .catch(() => {});
+          await log(
+            'ERROR',
+            `Search ${search.firstName}/${search.lastName} failed: ${message}`
+          );
+        }
+      }
+
+      // Honest final status: COMPLETED only when every planned search now has a
+      // COMPLETED checkpoint, including searches finished in an earlier run.
+      // Any unfinished search leaves the job FAILED so it can be resumed.
+      const allCheckpoints = await searchProgressRepository.listForJob(job.id);
+      const completedCount = allCheckpoints.filter(
+        (checkpoint) => checkpoint.status === STATUS.COMPLETED
+      ).length;
+      const allSucceeded =
+        allCheckpoints.length === searchPlan.length &&
+        completedCount === searchPlan.length;
+
+      if (allSucceeded) {
+        await jobRepository.markCompleted(job.id);
+        await log(
+          'INFO',
+          `Collection completed: all ${searchPlan.length} search(es) verified and imported.`
+        );
+      } else {
+        await jobRepository.markFailed(
+          job.id,
+          `Collection incomplete: ${completedCount} of ${searchPlan.length} search(es) verified and imported. Resume to retry unfinished searches.`
+        );
+        await log(
+          'WARN',
+          'Not all searches succeeded; job marked FAILED so it can be resumed.'
+        );
+      }
     } catch (error) {
       await jobRepository
         .markFailed(job.id, error && error.message ? error.message : String(error))
@@ -168,4 +305,9 @@ function createCollectionWorker({ jobRepository, importService, config }) {
   return { startRun, isBusy: () => activeJobId !== null };
 }
 
-module.exports = { createCollectionWorker };
+module.exports = {
+  createCollectionWorker,
+  buildSearchPlan,
+  searchSucceeded,
+  SUPERVISED_SEARCHES,
+};

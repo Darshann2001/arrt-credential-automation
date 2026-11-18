@@ -505,10 +505,13 @@ test('page handler waitForResults times out when no results appear', async () =>
   );
 });
 
-function gridData(names) {
+function gridData(names, displayedTotal = names.length) {
   return {
     headers: ['Name', 'City', 'State', 'Credential String'],
     rows: names.map((name) => [name, 'Vidalia', 'GA', 'R.T.(R)(ARRT)']),
+    rowCount: names.length,
+    displayedTotal,
+    infoText: `Showing 1 to ${names.length} of ${displayedTotal} entries`,
   };
 }
 
@@ -541,19 +544,66 @@ test('readDataTableRows reads the full in-memory grid in one page-side call', as
   assert.equal(result.rows.length, 3);
 });
 
-test('collectAllResultPages uses the grid cache and falls back to DOM only when unavailable', async () => {
+test('collectAllResultPages verifies the grid cache against the displayed total', async () => {
   const data = gridData(['Person One', 'Person Two', 'Person Three']);
   const apiPage = { async evaluate() { return data; } };
-  const api = await collectAllResultPages(apiPage, {}, '<div>fallback</div>');
+  // A partial DOM page is supplied deliberately: it must never be used.
+  const api = await collectAllResultPages(
+    apiPage,
+    {},
+    '<div id="searchList">only ten visible rows</div>'
+  );
 
   assert.equal(api.source, 'datatable-api');
+  assert.equal(api.verified, true);
   assert.equal(api.rowCount, 3);
+  assert.equal(api.displayedTotal, 3);
   assert.equal(createArrtAdapter().parseResultsHtml(api.html).acceptedCount, 3);
+});
 
-  const domHtml = '<div id="searchList">page one only</div>';
-  const dom = await collectAllResultPages({}, {}, domHtml);
-  assert.equal(dom.source, 'dom');
-  assert.equal(dom.html, domHtml);
+test('collectAllResultPages rejects a row-count mismatch instead of falling back to the DOM', async () => {
+  // The grid reports 3 total but the cache only returned 2 rows.
+  const data = gridData(['Person One', 'Person Two'], 3);
+  const apiPage = { async evaluate() { return data; } };
+
+  await assert.rejects(
+    collectAllResultPages(
+      apiPage,
+      {},
+      '<div id="searchList">two visible rows</div>'
+    ),
+    { code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH }
+  );
+});
+
+test('collectAllResultPages rejects when the DataTables grid is unavailable', async () => {
+  // No evaluate() at all: the old code silently returned the visible DOM page.
+  await assert.rejects(
+    collectAllResultPages({}, {}, '<div id="searchList">ten visible rows</div>'),
+    { code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH }
+  );
+});
+
+test('collectAllResultPages rejects when the grid reports no usable total', async () => {
+  const data = gridData(['Person One']);
+  delete data.displayedTotal;
+  const apiPage = { async evaluate() { return data; } };
+
+  await assert.rejects(
+    collectAllResultPages(apiPage, {}, null),
+    { code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH }
+  );
+});
+
+test('collectAllResultPages accepts a verified empty result set', async () => {
+  const data = gridData([]);
+  const apiPage = { async evaluate() { return data; } };
+
+  const api = await collectAllResultPages(apiPage, {}, null);
+
+  assert.equal(api.rowCount, 0);
+  assert.equal(api.displayedTotal, 0);
+  assert.equal(api.verified, true);
 });
 
 test('ARRT adapter analyzes the observed page shape offline', () => {

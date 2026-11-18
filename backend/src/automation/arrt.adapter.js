@@ -66,11 +66,12 @@ const ARRT_OBSERVED = Object.freeze({
 });
 
 /**
- * Reads every row from the grid's DataTables data cache in one page-side call.
- * This is a normal read of already-loaded page data; it never touches CAPTCHA
- * state, cookies or tokens. Returns null when DataTables is not available.
+ * Reads the full DataTables cache together with the total the grid reports to
+ * the operator. Counting both in the same page-side call lets the caller prove
+ * that no client-side page was missed. Never touches CAPTCHA state, cookies or
+ * tokens. Returns null when the grid is not available.
  */
-async function readDataTableRows(page) {
+async function readGridSnapshot(page) {
   if (typeof page.evaluate !== 'function') {
     return null;
   }
@@ -78,11 +79,12 @@ async function readDataTableRows(page) {
   try {
     return await page.evaluate((tableId) => {
       const jq = window.jQuery;
-      if (!jq || !jq.fn || !jq.fn.DataTable) {
+      if (!jq || !jq.fn || !jq.fn.DataTable || !document.getElementById(tableId)) {
         return null;
       }
 
       const table = jq(`#${tableId}`).DataTable();
+      const info = table.page.info();
       const headers = jq(`#${tableId} thead th`)
         .map((_, th) => jq(th).text().replace(/\s+/g, ' ').trim())
         .get();
@@ -104,11 +106,28 @@ async function readDataTableRows(page) {
           })
         );
 
-      return { headers, rows };
+      const infoEl = document.getElementById('grid_info');
+
+      return {
+        headers,
+        rows,
+        rowCount: rows.length,
+        displayedTotal: Number.isFinite(info.recordsTotal)
+          ? info.recordsTotal
+          : null,
+        infoText: infoEl
+          ? (infoEl.textContent || '').replace(/\s+/g, ' ').trim()
+          : '',
+      };
     }, RESULTS_TABLE_ID);
   } catch (error) {
     return null;
   }
+}
+
+async function readDataTableRows(page) {
+  const snapshot = await readGridSnapshot(page);
+  return snapshot ? { headers: snapshot.headers, rows: snapshot.rows } : null;
 }
 
 function escapeHtml(value) {
@@ -134,20 +153,59 @@ function tableDataToHtml(data) {
 
 /**
  * Returns HTML containing every result row for an already-submitted query.
- * Reads the full client-side grid at once; no per-page navigation needed.
+ * Reads the full client-side grid at once and verifies the row count against
+ * the total DataTables displays to the operator. If the grid cannot be read or
+ * the counts disagree, the search fails closed: no partial DOM page is ever
+ * treated as a successful result.
  */
 async function collectAllResultPages(page, handler, firstHtml) {
-  const data = await readDataTableRows(page);
+  const snapshot = await readGridSnapshot(page);
 
-  if (data && Array.isArray(data.rows) && data.rows.length) {
-    return {
-      html: tableDataToHtml(data),
-      rowCount: data.rows.length,
-      source: 'datatable-api',
-    };
+  if (!snapshot || !Array.isArray(snapshot.rows)) {
+    throw new AutomationError(
+      'ARRT results could not be verified: the DataTables grid was unavailable.',
+      {
+        code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH,
+        retryable: false,
+        details: { reason: 'datatable-unavailable' },
+      }
+    );
   }
 
-  return { html: firstHtml, rowCount: null, source: 'dom' };
+  if (!Number.isInteger(snapshot.displayedTotal) || snapshot.displayedTotal < 0) {
+    throw new AutomationError(
+      'ARRT results could not be verified: the grid did not report a total.',
+      {
+        code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH,
+        retryable: false,
+        details: { reason: 'total-unavailable', infoText: snapshot.infoText },
+      }
+    );
+  }
+
+  if (snapshot.rowCount !== snapshot.displayedTotal) {
+    throw new AutomationError(
+      `ARRT result count mismatch: read ${snapshot.rowCount} row(s) but the grid reports ${snapshot.displayedTotal}.`,
+      {
+        code: AUTOMATION_CODES.RESULT_COUNT_MISMATCH,
+        retryable: false,
+        details: {
+          reason: 'row-count-mismatch',
+          rowCount: snapshot.rowCount,
+          displayedTotal: snapshot.displayedTotal,
+          infoText: snapshot.infoText,
+        },
+      }
+    );
+  }
+
+  return {
+    html: tableDataToHtml(snapshot),
+    rowCount: snapshot.rowCount,
+    displayedTotal: snapshot.displayedTotal,
+    source: 'datatable-api',
+    verified: true,
+  };
 }
 
 /**
@@ -346,8 +404,7 @@ function createArrtAdapter(options = {}) {
         );
       }
 
-      const firstHtml = await handler.content();
-      const captured = await collectAllResultPages(page, handler, firstHtml);
+      const captured = await collectAllResultPages(page, handler, null);
 
       return {
         html: captured.html,
@@ -357,7 +414,12 @@ function createArrtAdapter(options = {}) {
         sourceUrl: ARRT_PAGE_URL,
         captcha: { present: false },
         search,
-        pagination: { pagesCaptured: captured.pagesCaptured },
+        pagination: {
+          verified: true,
+          rowCount: captured.rowCount,
+          displayedTotal: captured.displayedTotal,
+          source: captured.source,
+        },
       };
     } catch (error) {
       onEvent('ERROR', `ARRT search failed: ${error.message}`);
