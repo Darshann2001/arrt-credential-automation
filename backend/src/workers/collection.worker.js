@@ -63,15 +63,25 @@ function buildSearchPlan(limit) {
  * @param {object} result result of collectRecords() for a single search
  * @returns {boolean}
  */
+function getPageErrors(result) {
+  const stats = (result && result.stats) || {};
+  const extraction = stats.extraction || {};
+  // collectRecords() nests page errors under stats.extraction.pageErrors.
+  // The top-level fallback keeps older/compatible result shapes working.
+  return extraction.pageErrors ?? stats.pageErrors ?? [];
+}
+
 function searchSucceeded(result) {
+  const stats = (result && result.stats) || {};
+  const pageErrors = getPageErrors(result);
+
   return Boolean(
     result &&
       result.status === 'completed' &&
-      result.stats &&
-      result.stats.searchesCompleted >= 1 &&
-      result.stats.countsConsistent === true &&
-      Array.isArray(result.stats.pageErrors) &&
-      result.stats.pageErrors.length === 0
+      stats.searchesCompleted >= 1 &&
+      stats.countsConsistent === true &&
+      Array.isArray(pageErrors) &&
+      pageErrors.length === 0
   );
 }
 
@@ -227,10 +237,21 @@ function createCollectionWorker({
           if (!searchSucceeded(result)) {
             const reason =
               result && result.stopReason ? result.stopReason : 'verification-failed';
+            const stats = (result && result.stats) || {};
+            const diagnostic = [
+              `stopReason=${reason}`,
+              `status=${result && result.status}`,
+              `searchesCompleted=${stats.searchesCompleted}`,
+              `totalRows=${result && result.totalRows}`,
+              `accepted=${result && result.records && result.records.length}`,
+              `rejected=${result && result.rejectedCount}`,
+              `countsConsistent=${stats.countsConsistent}`,
+              `pageErrors=${JSON.stringify(getPageErrors(result).map((e) => e.code))}`,
+            ].join(' ');
             await searchProgressRepository.markFailed(checkpoint.id, reason);
             await log(
               'WARN',
-              `Search ${search.firstName}/${search.lastName} failed verification (${reason}); no records imported for it.`
+              `Search ${search.firstName}/${search.lastName} failed verification (${diagnostic}); no records imported for it.`
             );
             continue;
           }

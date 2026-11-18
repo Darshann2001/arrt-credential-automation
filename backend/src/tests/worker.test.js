@@ -60,7 +60,8 @@ function okResult(names = [], index = 0) {
     stats: {
       searchesCompleted: 1,
       countsConsistent: true,
-      pageErrors: [],
+      // collectRecords() nests page errors under stats.extraction.
+      extraction: { pageErrors: [] },
     },
   };
 }
@@ -74,7 +75,7 @@ function failedResult() {
     stats: {
       searchesCompleted: 0,
       countsConsistent: false,
-      pageErrors: [{ code: 'RESULT_COUNT_MISMATCH' }],
+      extraction: { pageErrors: [{ code: 'RESULT_COUNT_MISMATCH' }] },
     },
   };
 }
@@ -183,7 +184,10 @@ test('searchSucceeded requires a verified, complete single-search result', () =>
   assert.equal(
     searchSucceeded({
       ...okResult(['A']),
-      stats: { ...okResult(['A']).stats, pageErrors: [{ code: 'X' }] },
+      stats: {
+        ...okResult(['A']).stats,
+        extraction: { pageErrors: [{ code: 'X' }] },
+      },
     }),
     false
   );
