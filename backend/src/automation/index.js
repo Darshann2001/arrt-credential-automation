@@ -52,6 +52,8 @@ module.exports = {
   ARRT_PAGE_URL: arrtAdapter.ARRT_PAGE_URL,
   ARRT_OBSERVED: arrtAdapter.ARRT_OBSERVED,
   createArrtAdapter: arrtAdapter.createArrtAdapter,
+  collectAllResultPages: arrtAdapter.collectAllResultPages,
+  mergeResultPages: arrtAdapter.mergeResultPages,
 
   // Providers
   PROVIDER_CONTRACT_VERSION: providerContract.PROVIDER_CONTRACT_VERSION,

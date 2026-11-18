@@ -125,10 +125,11 @@ function createCollectionWorker({ jobRepository, importService, config }) {
     let provider = null;
 
     try {
-      await log('INFO', `Starting supervised live collection with ${plannedSearches} real name-fragment search(es).`);
+      const searchPlan = buildSearchPlan(plannedSearches);
+      await log('INFO', `Starting supervised live collection with ${searchPlan.length} real name-fragment search(es).`);
 
       provider = createProvider(approval, log);
-      const result = await collectRecords(buildSearchPlan(plannedSearches), {
+      const result = await collectRecords(searchPlan, {
         provider,
         allowLiveProvider: true,
         authorization: {

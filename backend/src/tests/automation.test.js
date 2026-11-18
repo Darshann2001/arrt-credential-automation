@@ -16,6 +16,8 @@ const {
   assertProvider,
   classifyError,
   collectRecords,
+  collectAllResultPages,
+  mergeResultPages,
   createArrtAdapter,
   createBackoffPolicy,
   createBrowserService,
@@ -499,6 +501,76 @@ test('page handler waitForResults times out when no results appear', async () =>
   await assert.rejects(
     handler.waitForResults('#searchList', 600),
     (error) => error.code === AUTOMATION_CODES.PROVIDER_ERROR
+  );
+});
+
+function resultPageHtml(names) {
+  const rows = names
+    .map(
+      (name) =>
+        `<tr><td>${name}</td><td>Vidalia</td><td>GA</td><td>R.T.(R)(ARRT)</td></tr>`
+    )
+    .join('');
+  return (
+    '<table id="grid"><thead><tr><th>Name</th><th>City</th><th>State</th>' +
+    `<th>Credential String</th></tr></thead><tbody>${rows}</tbody></table>`
+  );
+}
+
+test('mergeResultPages combines rows from every result page into one table', () => {
+  const merged = mergeResultPages([
+    resultPageHtml(['First Person']),
+    resultPageHtml(['Second Person']),
+  ]);
+  const parsed = createArrtAdapter().parseResultsHtml(merged);
+
+  assert.equal(parsed.totalRows, 2);
+  assert.equal(parsed.acceptedCount, 2);
+  assert.deepEqual(
+    parsed.records.map((record) => record.fullName),
+    ['First Person', 'Second Person']
+  );
+});
+
+test('collectAllResultPages widens page size and follows Next until the total is captured', async () => {
+  const views = [
+    { rows: 1, total: 3, hasNext: true, infoText: '1 - 1 of 3 items' },
+    { rows: 2, total: 3, hasNext: true, infoText: '1 - 2 of 3 items' },
+    { rows: 3, total: 3, hasNext: false, infoText: '1 - 3 of 3 items' },
+  ];
+  let viewIndex = 0;
+  const contents = [
+    resultPageHtml(['Person One']),
+    resultPageHtml(['Person Two']),
+    resultPageHtml(['Person Three']),
+  ];
+  let contentIndex = 1; // contents[0] is passed in as the first captured page
+
+  const page = {
+    async evaluate() {
+      return { ...views[viewIndex] };
+    },
+    async select() {
+      viewIndex = 1;
+    },
+  };
+  const handler = {
+    async click() {
+      viewIndex = 2;
+    },
+    async content() {
+      return contents[contentIndex++];
+    },
+  };
+
+  const captured = await collectAllResultPages(page, handler, contents[0]);
+  const parsed = createArrtAdapter().parseResultsHtml(captured.html);
+
+  assert.equal(captured.pagesCaptured, 3);
+  assert.equal(parsed.acceptedCount, 3);
+  assert.deepEqual(
+    parsed.records.map((record) => record.fullName),
+    ['Person One', 'Person Two', 'Person Three']
   );
 });
 
