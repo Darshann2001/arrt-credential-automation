@@ -17,7 +17,8 @@ const {
   classifyError,
   collectRecords,
   collectAllResultPages,
-  mergeResultPages,
+  readDataTableRows,
+  tableDataToHtml,
   createArrtAdapter,
   createBackoffPolicy,
   createBrowserService,
@@ -504,25 +505,16 @@ test('page handler waitForResults times out when no results appear', async () =>
   );
 });
 
-function resultPageHtml(names) {
-  const rows = names
-    .map(
-      (name) =>
-        `<tr><td>${name}</td><td>Vidalia</td><td>GA</td><td>R.T.(R)(ARRT)</td></tr>`
-    )
-    .join('');
-  return (
-    '<table id="grid"><thead><tr><th>Name</th><th>City</th><th>State</th>' +
-    `<th>Credential String</th></tr></thead><tbody>${rows}</tbody></table>`
-  );
+function gridData(names) {
+  return {
+    headers: ['Name', 'City', 'State', 'Credential String'],
+    rows: names.map((name) => [name, 'Vidalia', 'GA', 'R.T.(R)(ARRT)']),
+  };
 }
 
-test('mergeResultPages combines rows from every result page into one table', () => {
-  const merged = mergeResultPages([
-    resultPageHtml(['First Person']),
-    resultPageHtml(['Second Person']),
-  ]);
-  const parsed = createArrtAdapter().parseResultsHtml(merged);
+test('tableDataToHtml builds a complete table from all DataTables rows', () => {
+  const html = tableDataToHtml(gridData(['First Person', 'Second Person']));
+  const parsed = createArrtAdapter().parseResultsHtml(html);
 
   assert.equal(parsed.totalRows, 2);
   assert.equal(parsed.acceptedCount, 2);
@@ -532,46 +524,36 @@ test('mergeResultPages combines rows from every result page into one table', () 
   );
 });
 
-test('collectAllResultPages widens page size and follows Next until the total is captured', async () => {
-  const views = [
-    { rows: 1, total: 3, hasNext: true, infoText: '1 - 1 of 3 items' },
-    { rows: 2, total: 3, hasNext: true, infoText: '1 - 2 of 3 items' },
-    { rows: 3, total: 3, hasNext: false, infoText: '1 - 3 of 3 items' },
-  ];
-  let viewIndex = 0;
-  const contents = [
-    resultPageHtml(['Person One']),
-    resultPageHtml(['Person Two']),
-    resultPageHtml(['Person Three']),
-  ];
-  let contentIndex = 1; // contents[0] is passed in as the first captured page
+test('readDataTableRows reads the full in-memory grid in one page-side call', async () => {
+  const data = gridData(['Person One', 'Person Two', 'Person Three']);
+  let receivedTableId = null;
 
   const page = {
-    async evaluate() {
-      return { ...views[viewIndex] };
-    },
-    async select() {
-      viewIndex = 1;
-    },
-  };
-  const handler = {
-    async click() {
-      viewIndex = 2;
-    },
-    async content() {
-      return contents[contentIndex++];
+    async evaluate(fn, tableId) {
+      receivedTableId = tableId;
+      return data;
     },
   };
 
-  const captured = await collectAllResultPages(page, handler, contents[0]);
-  const parsed = createArrtAdapter().parseResultsHtml(captured.html);
+  const result = await readDataTableRows(page);
 
-  assert.equal(captured.pagesCaptured, 3);
-  assert.equal(parsed.acceptedCount, 3);
-  assert.deepEqual(
-    parsed.records.map((record) => record.fullName),
-    ['Person One', 'Person Two', 'Person Three']
-  );
+  assert.equal(receivedTableId, 'grid');
+  assert.equal(result.rows.length, 3);
+});
+
+test('collectAllResultPages uses the grid cache and falls back to DOM only when unavailable', async () => {
+  const data = gridData(['Person One', 'Person Two', 'Person Three']);
+  const apiPage = { async evaluate() { return data; } };
+  const api = await collectAllResultPages(apiPage, {}, '<div>fallback</div>');
+
+  assert.equal(api.source, 'datatable-api');
+  assert.equal(api.rowCount, 3);
+  assert.equal(createArrtAdapter().parseResultsHtml(api.html).acceptedCount, 3);
+
+  const domHtml = '<div id="searchList">page one only</div>';
+  const dom = await collectAllResultPages({}, {}, domHtml);
+  assert.equal(dom.source, 'dom');
+  assert.equal(dom.html, domHtml);
 });
 
 test('ARRT adapter analyzes the observed page shape offline', () => {

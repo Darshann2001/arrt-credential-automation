@@ -23,15 +23,11 @@ const {
 
 const ARRT_PAGE_URL = 'https://www.arrt.org/pages/verify-credentials';
 
-// The result list is a client-side DataTables grid. Only the current page's rows
-// are in the DOM, so we widen the page size and then follow "Next" until the
-// total reported by #grid_info has been captured. All of this is ordinary UI
-// interaction on the already-submitted page; no CAPTCHA token is touched.
+// The result list is a client-side DataTables grid (the site's own
+// VerifyCredentialsList.js sets no serverSide/ajax option). The single search
+// response already contains every row; DataTables only hides rows outside the
+// current page. Reading its full in-memory data set avoids per-page clicking.
 const RESULTS_TABLE_ID = 'grid';
-const RESULTS_INFO_ID = 'grid_info';
-const RESULTS_NEXT_ID = 'grid_next';
-const RESULTS_LENGTH_SELECTOR = '#grid_length';
-const MAX_RESULT_PAGES = 100;
 
 const ARRT_OBSERVED = Object.freeze({
   pageUrl: ARRT_PAGE_URL,
@@ -70,141 +66,88 @@ const ARRT_OBSERVED = Object.freeze({
 });
 
 /**
- * Reads the current DataTables page state from the live page.
- * Returns null on page doubles that cannot run evaluate(), in which case
- * pagination is skipped and the caller keeps the single captured page.
+ * Reads every row from the grid's DataTables data cache in one page-side call.
+ * This is a normal read of already-loaded page data; it never touches CAPTCHA
+ * state, cookies or tokens. Returns null when DataTables is not available.
  */
-async function readResultPageState(page) {
+async function readDataTableRows(page) {
   if (typeof page.evaluate !== 'function') {
     return null;
   }
 
-  return page.evaluate(
-    (tableId, infoId, nextId) => {
-      const table = document.getElementById(tableId);
-      const info = document.getElementById(infoId);
-      const next = document.getElementById(nextId);
-      const rows = table ? table.querySelectorAll('tbody tr').length : 0;
-      const infoText = info
-        ? (info.textContent || '').replace(/\s+/g, ' ').trim()
-        : '';
-      const match = infoText.match(/of\s+(\d+)\s+items/i);
+  try {
+    return await page.evaluate((tableId) => {
+      const jq = window.jQuery;
+      if (!jq || !jq.fn || !jq.fn.DataTable) {
+        return null;
+      }
 
-      return {
-        rows,
-        total: match ? Number(match[1]) : null,
-        hasNext: Boolean(next && !next.classList.contains('disabled')),
-        infoText,
-      };
-    },
-    RESULTS_TABLE_ID,
-    RESULTS_INFO_ID,
-    RESULTS_NEXT_ID
-  );
+      const table = jq(`#${tableId}`).DataTable();
+      const headers = jq(`#${tableId} thead th`)
+        .map((_, th) => jq(th).text().replace(/\s+/g, ' ').trim())
+        .get();
+
+      const rows = table
+        .rows()
+        .data()
+        .toArray()
+        .map((cells) =>
+          Array.from(cells).map((cell) => {
+            if (typeof cell !== 'string') {
+              return cell == null
+                ? ''
+                : String(cell).replace(/\s+/g, ' ').trim();
+            }
+            const div = document.createElement('div');
+            div.innerHTML = cell;
+            return (div.textContent || '').replace(/\s+/g, ' ').trim();
+          })
+        );
+
+      return { headers, rows };
+    }, RESULTS_TABLE_ID);
+  } catch (error) {
+    return null;
+  }
 }
 
-function pageSignature(state) {
-  return state ? `${state.infoText}|${state.rows}` : '';
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
-async function waitForTableChange(page, previousSignature, timeoutMs = 10000) {
-  const deadline = Date.now() + timeoutMs;
+/** Rebuilds a parseable table from the full DataTables row set. */
+function tableDataToHtml(data) {
+  const headers = Array.isArray(data.headers) ? data.headers : [];
+  const head = `<tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join('')}</tr>`;
+  const body = data.rows
+    .map((cells) => {
+      const limited = headers.length ? cells.slice(0, headers.length) : cells;
+      return `<tr>${limited.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`;
+    })
+    .join('');
 
-  while (Date.now() < deadline) {
-    const state = await readResultPageState(page);
-    if (state && pageSignature(state) !== previousSignature) {
-      return state;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 200));
-  }
-
-  return null;
-}
-
-/** Merges the rendered rows of every captured page into one parseable table. */
-function mergeResultPages(htmlPages) {
-  const usable = (htmlPages || []).filter(
-    (html) => typeof html === 'string' && html.trim()
-  );
-
-  if (usable.length === 0) {
-    return '';
-  }
-  if (usable.length === 1) {
-    return usable[0];
-  }
-
-  let headerHtml = '';
-  const rowParts = [];
-
-  for (const html of usable) {
-    const $page = cheerio.load(html, null, false);
-    const table = $page(`#${RESULTS_TABLE_ID}`).first().length
-      ? $page(`#${RESULTS_TABLE_ID}`).first()
-      : $page('table').first();
-    if (!table.length) {
-      continue;
-    }
-
-    if (!headerHtml) {
-      const thead = table.find('thead').first();
-      const headRows = thead.length
-        ? thead.find('tr').toArray()
-        : table.find('tr').toArray().slice(0, 1);
-      headerHtml = headRows.map((row) => $page.html(row)).join('');
-    }
-
-    const tbody = table.find('tbody').first();
-    const dataRows = tbody.length
-      ? tbody.find('tr').toArray()
-      : table.find('tr').toArray().slice(1);
-    for (const row of dataRows) {
-      rowParts.push($page.html(row));
-    }
-  }
-
-  if (!rowParts.length) {
-    return usable[0];
-  }
-
-  return `<table id="${RESULTS_TABLE_ID}"><thead>${headerHtml}</thead><tbody>${rowParts.join('')}</tbody></table>`;
+  return `<table id="${RESULTS_TABLE_ID}"><thead>${head}</thead><tbody>${body}</tbody></table>`;
 }
 
 /**
- * Captures all result pages for an already-submitted query. First widens the
- * DataTables page size to 100 (one UI action), then follows Next while the
- * reported total exceeds the rows collected so far.
+ * Returns HTML containing every result row for an already-submitted query.
+ * Reads the full client-side grid at once; no per-page navigation needed.
  */
 async function collectAllResultPages(page, handler, firstHtml) {
-  const htmlPages = [firstHtml];
+  const data = await readDataTableRows(page);
 
-  if (typeof page.select === 'function') {
-    try {
-      const before = await readResultPageState(page);
-      await page.select(RESULTS_LENGTH_SELECTOR, '100');
-      await waitForTableChange(page, pageSignature(before));
-      htmlPages.push(await handler.content());
-    } catch (error) {
-      // The length selector is an optimization; Next-clicking still works.
-    }
+  if (data && Array.isArray(data.rows) && data.rows.length) {
+    return {
+      html: tableDataToHtml(data),
+      rowCount: data.rows.length,
+      source: 'datatable-api',
+    };
   }
 
-  for (let pageNumber = 0; pageNumber < MAX_RESULT_PAGES; pageNumber += 1) {
-    const before = await readResultPageState(page);
-    if (!before || !before.total || before.rows >= before.total || !before.hasNext) {
-      break;
-    }
-
-    try {
-      await handler.click(`#${RESULTS_NEXT_ID}`);
-      await waitForTableChange(page, pageSignature(before));
-      htmlPages.push(await handler.content());
-    } catch (error) {
-      break;
-    }
-  }
-
-  return { html: mergeResultPages(htmlPages), pagesCaptured: htmlPages.length };
+  return { html: firstHtml, rowCount: null, source: 'dom' };
 }
 
 /**
@@ -443,5 +386,6 @@ module.exports = {
   ARRT_OBSERVED,
   createArrtAdapter,
   collectAllResultPages,
-  mergeResultPages,
+  readDataTableRows,
+  tableDataToHtml,
 };

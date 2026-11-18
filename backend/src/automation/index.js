@@ -53,7 +53,8 @@ module.exports = {
   ARRT_OBSERVED: arrtAdapter.ARRT_OBSERVED,
   createArrtAdapter: arrtAdapter.createArrtAdapter,
   collectAllResultPages: arrtAdapter.collectAllResultPages,
-  mergeResultPages: arrtAdapter.mergeResultPages,
+  readDataTableRows: arrtAdapter.readDataTableRows,
+  tableDataToHtml: arrtAdapter.tableDataToHtml,
 
   // Providers
   PROVIDER_CONTRACT_VERSION: providerContract.PROVIDER_CONTRACT_VERSION,
