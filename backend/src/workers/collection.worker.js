@@ -23,16 +23,17 @@ const { createBrowserService } = require('../automation/browser.service');
 const { createPageHandler } = require('../automation/page-handler');
 const { collectRecords } = require('../automation/collection.service');
 /**
- * Real name-fragment queries that return live ARRT rows. ARRT matches name
- * substrings (e.g. "chris" matches Christian/Christie, "adam" matches
- * Adams/McAdam/Risk-Adams); wildcard patterns like "A*" return nothing.
+ * One high-yield, real name-fragment query per supervised run. ARRT matches
+ * substrings anywhere in the name (e.g. "adam" matched Adams, McAdam and
+ * Risk-Adams), so a common first/last-name pair returns many rows in a single
+ * search and a single CAPTCHA. Wildcards like "A*" are literal text and return
+ * nothing.
  *
- * One query per supervised run keeps the human to a single CAPTCHA. The first
- * pair is verified against the live site; the others are documented fallbacks
- * and are only used if an operator changes SUPERVISED_SEARCHES.
+ * "john" / "smith" are among the most common US first and last names, so this
+ * query is expected to return a large result set from one request.
  */
 const SUPERVISED_SEARCHES = Object.freeze([
-  { firstName: 'chris', lastName: 'adam' },
+  { firstName: 'john', lastName: 'smith' },
 ]);
 
 function buildSearchPlan(limit) {
@@ -142,8 +143,11 @@ function createCollectionWorker({ jobRepository, importService, config }) {
         maxRetries: 0,
       });
 
+      // One broad search can return more rows than the configured cap. Enforce
+      // the cap here as well so a single response cannot exceed it.
+      const recordCap = Math.max(1, job.requestedTarget);
       await importService.importRecords({
-        records: result.records,
+        records: result.records.slice(0, recordCap),
         source: job.source,
         jobId: job.id,
       });
