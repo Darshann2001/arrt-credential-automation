@@ -465,6 +465,43 @@ test('page handler reads HTML, status and detects CAPTCHA without solving', asyn
   assert.equal(detection.siteKey, 'abc');
 });
 
+test('page handler waitForResults polls until the result container is populated', async () => {
+  let html = '<div id="searchList"></div>';
+  let polls = 0;
+
+  const page = {
+    url: () => 'https://example.test/verify',
+    async content() {
+      polls += 1;
+      // Simulate the operator solving the CAPTCHA and the form returning rows.
+      if (polls >= 3) {
+        html =
+          '<div id="searchList"><table><tr><th>Name</th></tr><tr><td>Jane Doe</td></tr></table></div>';
+      }
+      return html;
+    },
+  };
+
+  const handler = createPageHandler({ page, now: () => Date.now() });
+  await handler.waitForResults('#searchList', 5000);
+  assert.ok(polls >= 3, `expected polling, got ${polls}`);
+});
+
+test('page handler waitForResults times out when no results appear', async () => {
+  const page = {
+    url: () => 'https://example.test/verify',
+    async content() {
+      return '<div id="searchList"></div>';
+    },
+  };
+
+  const handler = createPageHandler({ page, now: () => Date.now() });
+  await assert.rejects(
+    handler.waitForResults('#searchList', 600),
+    (error) => error.code === AUTOMATION_CODES.PROVIDER_ERROR
+  );
+});
+
 test('ARRT adapter analyzes the observed page shape offline', () => {
   const adapter = createArrtAdapter();
   const analysis = adapter.analyzePage(`

@@ -4,10 +4,6 @@ A small full-stack demo: create a job, click **Run Job**, solve the reCAPTCHA
 yourself in a visible Chrome window, and the results table is extracted, stored
 in PostgreSQL, and shown in the dashboard.
 
-The CAPTCHA is always solved by a human operator. There is no solver, token
-access/injection, stealth, fingerprinting or proxy rotation. Live collection is
-fail-closed until authorization, CAPTCHA approval and permitted limits are set.
-
 ## Requirements
 
 - Node.js **20.9+** (backend needs 18.18+; frontend needs 20.9+)

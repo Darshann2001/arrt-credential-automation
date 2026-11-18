@@ -240,9 +240,10 @@ function createArrtAdapter(options = {}) {
       }
 
       try {
-        await page.waitForSelector(ARRT_OBSERVED.selectors.results, {
-          timeout: captchaWaitMs,
-        });
+        await handler.waitForResults(
+          ARRT_OBSERVED.selectors.results,
+          captchaWaitMs
+        );
       } catch (error) {
         throw new AutomationError(
           'Timed out waiting for ARRT results. Ensure the CAPTCHA was solved and the form was submitted.',

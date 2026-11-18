@@ -250,6 +250,51 @@ function createPageHandler(options = {}) {
     });
   }
 
+  /**
+   * Waits until a results container is actually populated (a result table or an
+   * explicit "no results" message), not merely present in the DOM. Used for the
+   * supervised flow so the visible browser stays open while the operator solves
+   * the CAPTCHA and submits the form. Never reads or injects a CAPTCHA token.
+   */
+  async function waitForResults(selector, timeoutMs = defaultTimeoutMs) {
+    const predicate = (target) => {
+      const el = document.querySelector(target);
+      if (!el) return false;
+      const text = (el.textContent || '').trim();
+      if (/no\s+results|no\s+matching|0\s+records/i.test(text)) return true;
+      if (el.querySelector('table')) return true;
+      if (el.querySelector('tr td')) return true;
+      return false;
+    };
+
+    if (typeof page.waitForFunction === 'function') {
+      await page.waitForFunction(predicate, { timeout: timeoutMs }, selector);
+      return;
+    }
+
+    // Fallback for minimal page doubles used in tests: poll the HTML directly.
+    const deadline = now() + timeoutMs;
+    while (now() < deadline) {
+      const html = await content();
+      const $ = cheerio.load(html);
+      const el = $(selector);
+      const text = el.text().trim();
+      if (
+        el.find('table').length > 0 ||
+        el.find('tr td').length > 0 ||
+        /no\s+results|no\s+matching|0\s+records/i.test(text)
+      ) {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new AutomationError('Timed out waiting for ARRT results to appear.', {
+      code: AUTOMATION_CODES.PROVIDER_ERROR,
+      retryable: false,
+      details: { selector, timeoutMs },
+    });
+  }
+
   return {
     page,
     goto,
@@ -258,6 +303,7 @@ function createPageHandler(options = {}) {
     fill,
     click,
     waitForSelector,
+    waitForResults,
     detectCaptcha,
     detectCaptchaInHtml,
   };
