@@ -3,10 +3,15 @@
 /**
  * Thin supervised collection worker.
  *
- * One job at a time. It opens a visible Chrome window, fills the wildcard name
- * plan, waits for the operator to solve the reCAPTCHA and submit, extracts the
+ * One job at a time. It opens a visible Chrome window, fills a real name-fragment
+ * query, waits for the operator to solve the reCAPTCHA and submit, extracts the
  * results with the existing engine, imports them into the DB, then closes the
  * browser. No CAPTCHA solving, token access, stealth or proxy rotation.
+ *
+ * ARRT does substring matching on real name text. Patterns such as "A*" are
+ * treated literally and return no rows, so the plan uses real name fragments
+ * that are known to return live results. Each search requires a human CAPTCHA,
+ * so the supervised demo intentionally uses a single query.
  */
 
 const { assertLiveCollectionAllowed } = require('../config/env');
@@ -17,19 +22,21 @@ const {
 const { createBrowserService } = require('../automation/browser.service');
 const { createPageHandler } = require('../automation/page-handler');
 const { collectRecords } = require('../automation/collection.service');
-const {
-  generateAlphabetPatterns,
-  generateCombinations,
-} = require('../services/name-generator.service');
+/**
+ * Real name-fragment queries that return live ARRT rows. ARRT matches name
+ * substrings (e.g. "chris" matches Christian/Christie, "adam" matches
+ * Adams/McAdam/Risk-Adams); wildcard patterns like "A*" return nothing.
+ *
+ * One query per supervised run keeps the human to a single CAPTCHA. The first
+ * pair is verified against the live site; the others are documented fallbacks
+ * and are only used if an operator changes SUPERVISED_SEARCHES.
+ */
+const SUPERVISED_SEARCHES = Object.freeze([
+  { firstName: 'chris', lastName: 'adam' },
+]);
 
 function buildSearchPlan(limit) {
-  const patterns = generateAlphabetPatterns();
-  const { combinations } = generateCombinations(
-    { firstNames: patterns, lastNames: patterns },
-    { maxCombinations: patterns.length * patterns.length }
-  );
-
-  return combinations.slice(0, limit);
+  return SUPERVISED_SEARCHES.slice(0, Math.max(1, Math.min(limit, SUPERVISED_SEARCHES.length)));
 }
 
 function createCollectionWorker({ jobRepository, importService, config }) {
@@ -118,7 +125,7 @@ function createCollectionWorker({ jobRepository, importService, config }) {
     let provider = null;
 
     try {
-      await log('INFO', `Starting live collection with ${plannedSearches} wildcard searches.`);
+      await log('INFO', `Starting supervised live collection with ${plannedSearches} real name-fragment search(es).`);
 
       provider = createProvider(approval, log);
       const result = await collectRecords(buildSearchPlan(plannedSearches), {

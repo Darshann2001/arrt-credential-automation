@@ -12,6 +12,9 @@ prisma/generated/
 # Contains browser cookies only; never add it to source control.
 .browser-profile/
 
+# Local diagnostic dumps (may contain real personal data from ARRT).
+.debug/
+
 # Logs and coverage.
 *.log
 coverage/

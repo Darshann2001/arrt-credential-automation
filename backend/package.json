@@ -12,6 +12,7 @@
     "test:manual-search": "node --test src/tests/manual-search.test.js",
     "test:api": "node --test src/tests/api.test.js",
     "test:arrt:manual": "node scripts/test-arrt-manual-search.js",
+    "diag:search": "node scripts/diagnose-arrt-search.js",
     "start": "node src/index.js",
     "start:api": "node src/api/server.js",
     "api:start": "node src/api/server.js",
