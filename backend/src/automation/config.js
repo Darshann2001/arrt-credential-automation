@@ -56,7 +56,7 @@ const DEFAULT_AUTOMATION_CONFIG = Object.freeze({
   stopOnAccessDenial: true,
   stopOnCaptcha: true,
   extract: Object.freeze({
-    maxRows: 10000,
+    maxRows: 100000,
     dedupe: true,
   }),
 });

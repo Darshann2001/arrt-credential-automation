@@ -143,11 +143,8 @@ function createCollectionWorker({ jobRepository, importService, config }) {
         maxRetries: 0,
       });
 
-      // One broad search can return more rows than the configured cap. Enforce
-      // the cap here as well so a single response cannot exceed it.
-      const recordCap = Math.max(1, job.requestedTarget);
       await importService.importRecords({
-        records: result.records.slice(0, recordCap),
+        records: result.records,
         source: job.source,
         jobId: job.id,
       });
